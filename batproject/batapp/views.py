@@ -2,7 +2,9 @@ from django.http import HttpResponse
 from django.shortcuts import render
 
 # Create your views here.
+from django.template import loader
 from batapp.forms import PictureForm
+from .models import Picture
 
 
 def upload_image(request):
@@ -15,6 +17,15 @@ def upload_image(request):
             picture.save()
             return HttpResponse('upload successful')
 
-        else:
-            form = PictureForm()
-            return render(request, 'image.html', {'form': form})
+    form = PictureForm()
+    print("Hallo")
+    return render(request, 'image.html', {'form': form})
+
+
+def get_all_images(request):
+
+    pictures = Picture.objects.all()
+    for p in pictures:
+        print("Das steht in der Datenbank:")
+        print(p.picture_path_file.url)
+    return render(request, 'getimages.html', {'pictures': pictures})
