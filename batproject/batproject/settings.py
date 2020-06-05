@@ -31,8 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'batapp.apps.BatappConfig'
-    'accountapp.apps.AccountappConfig'
+    'batapp.apps.BatappConfig',
+    'accountapp.apps.AccountappConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
