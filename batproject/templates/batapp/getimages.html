@@ -1,10 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends 'base.html' %}
+
+    {% block content %}
+        {% for p in pictures %}
+            <div class="col-md-4">
+                <img src= "{{p.picture_path_file.url}}" class="image-responsive" style="width: 100%; float: left; margin-right: 10px;" />
+            </div>
+        {% endfor %}
+    {% endblock %}
+
+
