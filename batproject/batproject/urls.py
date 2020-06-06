@@ -22,6 +22,7 @@ from batproject import settings
 urlpatterns = [
 
     path('batapp/', include('batapp.urls')),
+    path('accountapp/', include('accountapp.urls')),
     path('admin/', admin.site.urls),
 
 ]
