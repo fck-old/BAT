@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <div class="container">
+    <h2>You are</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+    </form>
+  </div>
+{% endblock %}>
