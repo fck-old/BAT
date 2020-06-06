@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
 
@@ -7,6 +8,7 @@ from batapp.forms import PictureForm
 from .models import Picture
 
 
+@login_required
 def upload_image(request):
 
     if request.method == 'POST':
@@ -22,6 +24,7 @@ def upload_image(request):
     return render(request, 'image.html', {'form': form})
 
 
+@login_required
 def get_all_images(request):
 
     pictures = Picture.objects.all()
@@ -29,3 +32,8 @@ def get_all_images(request):
         print("Das steht in der Datenbank:")
         print(p.picture_path_file.url)
     return render(request, 'getimages.html', {'pictures': pictures})
+
+
+def functionality(request):
+
+    return render(request, 'functionality.html')
