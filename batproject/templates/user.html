@@ -13,4 +13,11 @@
 </ul>
     </form>
   </div>
+<div class="container">
+            <div>Account anlegen: <a href= "{% url 'signup' %}"> {% url 'signup' %} </a> </div>
+            <div>einloggen: <a href= "{% url 'login' %}"> {% url 'login' %} </a> </div>
+            <div>ausloggen: <a href= "{% url 'logout' %}"> {% url 'logout' %} </a> </div>
+            <div>Bilder hochladen: <a href= "{% url 'upload' %}"> {% url 'upload' %} </a> </div>
+  <div>(alle) Bilder vom Server abrufen: <a href= "{% url 'getimages' %}"> {% url 'getimages' %} </a></div>
+</div>
 {% endblock %}>
