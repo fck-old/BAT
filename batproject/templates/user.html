@@ -2,10 +2,15 @@
 
 {% block body %}
   <div class="container">
-    <h2>You are</h2>
+    <h2>Your user infos</h2>
     <form method="post" novalidate>
       {% csrf_token %}
-      {{ form.as_p }}
+      <h2>{{ user.get_full_name }}</h2>
+<ul>
+  <li>Username: {{ user.username }}</li>
+  <li>Email: {{ user.email }}</li>
+  <li>Role: {{ user.role}}</li>
+</ul>
     </form>
   </div>
 {% endblock %}>

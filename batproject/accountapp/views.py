@@ -17,7 +17,8 @@ def signup(request):
             print("Form ist valide")
             form_bat_user = form.save()
             auth_login(request, form_bat_user)
-            return render(request, 'signup.html', {'form': form})
+            context = {'username': request.user.username, 'email': request.user.email, 'role': request.user.role}
+            return render(request, 'user.html', context)
     else:
         form = SignUpForm()
         print("gib html aus")
