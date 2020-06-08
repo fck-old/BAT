@@ -5,7 +5,7 @@ from .models import User
 
 TAGGER_OR_UPLOADER = (
     ("tagger", "tagger"),
-    ("tagger", "uploader"),
+    ("uploader", "uploader"),
 )
 
 
