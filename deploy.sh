@@ -9,4 +9,4 @@ cp docker/settings.py batproject/batproject/settings.py
 
 echo "starting docker"
 
-sudo docker-compose up
+sudo docker-compose up --build
