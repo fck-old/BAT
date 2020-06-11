@@ -84,8 +84,11 @@ Open http://localhost:8000/ in any browser and you will see the a local version 
 ## Contributing
 
 Since open source project are about contributing to projects, feel free to fork our repository.
+
 If you want to develop any new features, make sure to open a new branch and to always keep your repository up to date.
+
 After you have changed something or finished your new feature, make sure to commit your changed and make a pull request.
+
 Any member of our development team is allowed to merge pull requests.
 
 
