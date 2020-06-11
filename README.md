@@ -96,11 +96,17 @@ Any member of our development team is allowed to merge pull requests.
 ## Credits
 
 Product Owner: Markus Städler
+
 Scrum-Master: Louis Loechel
+
 QA: Felix Dannenberg
+
 Frontend: Gergana Vladimirova, Frank Kohlhepp
+
 Backend: Henning Schaaf, Vincent Spell
+
 DevOps: James Laycock
+
 
 <!-- License -->
 ## License
