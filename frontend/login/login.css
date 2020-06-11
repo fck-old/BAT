@@ -1,0 +1,88 @@
+html,body {
+	height: 100%;
+}
+
+body {
+	background: linear-gradient(180deg, rgba(39,64,41,1) 30%, rgba(49,92,43,1) 85%);
+}
+
+/* Login Card */
+
+.card {
+  width: 90%;
+  padding: 5%;
+  margin: 5%;
+  background-color: #262626;
+  border-color: transparent;
+  box-shadow: 5px 5px 5px #262626;
+}
+
+/* for tablets */
+@media (min-width: 768px) { 
+  .card {
+    width: 75%;
+  }
+}
+
+/* for large devices */
+@media (min-width: 992px) { 
+  .card {
+    width: 60%;
+  }
+}
+
+.card-body {
+  text-align: center;
+  padding: 0;
+}
+
+h1 {
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Input Boxes */
+
+.form-control {
+  background: none;
+  width: 70%;
+  text-align: center;
+  color: white;
+  padding: 5%;
+  margin: 0 auto;
+  border: 2.5px solid #363636;
+  border-radius: 20px;
+  transition: 0.30s;
+}
+
+.form-control:focus {
+  background: none;
+  width: 80%;
+  color: white;
+  border-color: #F7B500;
+  box-shadow: none;
+}
+
+/* Submit Button */
+
+.btn-primary {
+  background: none;
+  width: 40%;
+  border: 2px solid #315C2B;
+  padding: 3%;
+  color: white;
+  border-radius: 20px;
+  transition: 0.30s;
+}
+
+.btn-primary:hover,
+.btn-primary:active,
+.btn-primary:focus {
+  background-color: #315C2B !important;
+  border-color: #315C2B !important;
+  box-shadow: 0 0 0 0.2rem #315C2B !important;
+}
+
+a {
+  color: #F7B500 !important;
+}
