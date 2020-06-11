@@ -11,8 +11,7 @@ TAGGER_OR_UPLOADER = (
 
 class SignUpForm(UserCreationForm):
     email = forms.CharField(max_length=254, required=True, widget=forms.EmailInput())
-    role = forms.ChoiceField(choices=TAGGER_OR_UPLOADER)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'role', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
