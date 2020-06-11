@@ -129,4 +129,5 @@ MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accountapp.User'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
