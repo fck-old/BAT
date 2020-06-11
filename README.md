@@ -77,7 +77,8 @@ YourPathToTheProject\BAT\batproject python manage.py runserver
 <!-- Usage -->
 ## Usage
 
-Open http://localhost:8000/ in any browser and you will see the a local version of BAT.
+Open http://localhost:8000/ in any browser and you will see a local version of BAT.
+In the next weeks, we are adding the possibility to host the server on docker and other platforms.
 
 
 <!-- Contributing -->
