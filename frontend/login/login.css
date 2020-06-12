@@ -3,7 +3,7 @@ html,body {
 }
 
 body {
-	background: linear-gradient(180deg, rgba(39,64,41,1) 30%, rgba(49,92,43,1) 85%);
+	background-color: #262626;
 }
 
 /* Login Card */
@@ -12,9 +12,10 @@ body {
   width: 90%;
   padding: 5%;
   margin: 5%;
-  background-color: #262626;
+  background: #274029;
+  /* background: linear-gradient(180deg, rgba(39,64,41,1) 30%, rgba(49,92,43,1) 85%); */
   border-color: transparent;
-  box-shadow: 5px 5px 5px #262626;
+  box-shadow: 5px 5px 5px black;
 }
 
 /* for tablets */
@@ -33,7 +34,6 @@ body {
 
 .card-body {
   text-align: center;
-  padding: 0;
 }
 
 h1 {
@@ -49,8 +49,8 @@ h1 {
   text-align: center;
   color: white;
   padding: 5%;
-  margin: 0 auto;
-  border: 2.5px solid #363636;
+  margin: auto;
+  border: 2.5px solid #315C2B;
   border-radius: 20px;
   transition: 0.30s;
 }
@@ -63,12 +63,23 @@ h1 {
   box-shadow: none;
 }
 
+/* Checkbox */
+
+.custom-checkbox .custom-control-input:checked~.custom-control-label::before{
+  background-color:#F7B500;
+  border-color: #F7B500;
+}
+
+.custom-control-input:focus~.custom-control-label::before {
+  box-shadow: 0 0 0 1px #F7B500, 0 0 0 0.2rem rgba(247, 181, 0, 0.25);
+}
+
 /* Submit Button */
 
 .btn-primary {
   background: none;
   width: 40%;
-  border: 2px solid #315C2B;
+  border: 2px solid #F7B500;
   padding: 3%;
   color: white;
   border-radius: 20px;
@@ -78,9 +89,9 @@ h1 {
 .btn-primary:hover,
 .btn-primary:active,
 .btn-primary:focus {
-  background-color: #315C2B !important;
-  border-color: #315C2B !important;
-  box-shadow: 0 0 0 0.2rem #315C2B !important;
+  background-color: #F7B500 !important;
+  border-color: #F7B500 !important;
+  box-shadow: 0 0 0 0.2rem #F7B500 !important;
 }
 
 a {
