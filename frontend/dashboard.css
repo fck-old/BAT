@@ -53,7 +53,7 @@ body {
 }
 
 #theimage {
-  height: 100%;
+  
 }
 
 .h-100-m-48 {
@@ -61,11 +61,11 @@ body {
 }
 
 .tag {
-  width: 260px;
-  height: 150px;
+  width: 180px;
+  height: 110px;
   position: absolute;
-  top: 220px;
-  left: 660px;
+  top: 140px;
+  left: 430px;
   border: 8px solid #f7b500;
   border-radius: 3px;
   box-shadow: 0px 0px 3px black;
