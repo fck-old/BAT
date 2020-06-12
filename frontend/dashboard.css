@@ -1,3 +1,80 @@
+html,
+body {
+  height: 100%;
+  background: rgb(24,23,27);
+  background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
+  color: white;
+}
+
+#sidebarMenu {
+  background-color: #171717;
+}
+
+#navbar {
+  background-color: #9DA39A;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: white;
+}
+
+.sidebar .nav-link {
+  font-weight: 500;
+  color: #F6F4F3;
+}
+
+.sidebar .nav-link .feather {
+  margin-right: 4px;
+  color: #857F74;
+}
+
+.sidebar .nav-link.active {
+  color: #DB4C40;
+}
+
+.sidebar .nav-link:hover .feather,
+.sidebar .nav-link.active .feather {
+  color: inherit;
+}
+
+.totag {
+  color: #f7b500;
+}
+
+#main {
+  position: relative;
+  height: 100%;
+}
+
+#image-container {
+  width: 100%;
+  height: calc(100% - 110px);
+  position: relative;
+}
+
+#theimage {
+  height: 100%;
+}
+
+.h-100-m-48 {
+  height: calc(100% - 48px);
+}
+
+.tag {
+  width: 260px;
+  height: 150px;
+  position: absolute;
+  top: 220px;
+  left: 660px;
+  border: 8px solid #f7b500;
+  border-radius: 3px;
+  box-shadow: 0px 0px 3px black;
+}
+
+
+
+
+
 body {
   font-size: .875rem;
 }
@@ -44,24 +121,7 @@ body {
   }
 }
 
-.sidebar .nav-link {
-  font-weight: 500;
-  color: #333;
-}
 
-.sidebar .nav-link .feather {
-  margin-right: 4px;
-  color: #999;
-}
-
-.sidebar .nav-link.active {
-  color: #007bff;
-}
-
-.sidebar .nav-link:hover .feather,
-.sidebar .nav-link.active .feather {
-  color: inherit;
-}
 
 .sidebar-heading {
   font-size: .75rem;
@@ -87,8 +147,17 @@ body {
 
 .navbar .form-control {
   padding: .75rem 1rem;
+  margin-left: 5px;
   border-width: 0;
   border-radius: 0;
+}
+
+.navbar .form-control::placeholder {
+  color: rgba(255,255,255,.5)
+}
+
+.navbar .form-control:focus::placeholder {
+  color: rgba(0,0,0,.5)
 }
 
 .form-control-dark {
@@ -101,3 +170,7 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+
+
+
