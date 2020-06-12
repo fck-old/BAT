@@ -1,3 +1,50 @@
+html,
+body {
+  height: 100%;
+  background: rgb(24,23,27);
+  background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
+  background-image: url("https://frank.kohlhepp.me/tmp/bg.jpg");
+  background-size: contain;
+}
+
+.mastfoot,
+.mastfoot a,
+.mastfoot a:hover {
+  color: rgba(255, 255, 255, .5);
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.love {
+  cursor: default;
+}
+
+.love .icon {
+  margin-left: 1px;
+  margin-right: 1px;
+  height: 10px;
+  width: 10px;
+  background-image: url("img/heart.svg");
+  background-size: contain;
+  display: inline-block;
+}
+
+#logo {
+  width: 200px;
+  height: 200px;
+}
+
+#bat {
+  font-size: 80px;
+  font-family: "Impact";
+  display: inline;
+  position: relative;
+  top: 35px;
+  margin-left: 50px;
+}
+
+
+
 /*
  * Globals
  */
@@ -24,11 +71,7 @@ a:hover {
  * Base structure
  */
 
-html,
-body {
-  height: 100%;
-  background-color: #333;
-}
+
 
 body {
   display: -ms-flexbox;
@@ -95,12 +138,4 @@ body {
 .cover .btn-lg {
   padding: .75rem 1.25rem;
   font-weight: 700;
-}
-
-
-/*
- * Footer
- */
-.mastfoot {
-  color: rgba(255, 255, 255, .5);
 }
