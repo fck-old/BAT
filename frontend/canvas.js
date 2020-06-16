@@ -12,8 +12,8 @@ $(document).ready(function() {
         var ct = $("#container");
         var trans = $("#translation");
         
-        cv.attr("height", img.height);
-        cv.attr("width", img.width);
+        cv[0].height = img[0].naturalHeight;
+        cv[0].width = img[0].naturalWidth;
         
         if (img.width() > img.height()) {
             img.css("width", "100%");
