@@ -62,6 +62,10 @@ $(document).ready(function() {
             } else {
                 img.css("height", cValue + "%");
             }
+            
+            var cv = $("#canvas");
+            cv.css("width", img.width());
+            cv.css("height", img.height());
         }
         
         if (event.code == "Comma") {
@@ -73,6 +77,10 @@ $(document).ready(function() {
             } else {
                 img.css("height", cValue + "%");
             }
+            
+            var cv = $("#canvas");
+            cv.css("width", img.width());
+            cv.css("height", img.height());
         }
         
         var trans = $("#translation");
@@ -88,6 +96,10 @@ $(document).ready(function() {
             } else {
                 img.css("height", cValue + "%");
             }
+            
+            var cv = $("#canvas");
+            cv.css("width", img.width());
+            cv.css("height", img.height());
         }
         
         if (event.code == "KeyW") {
