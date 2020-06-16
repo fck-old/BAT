@@ -1,0 +1,41 @@
+#container {
+  background-color: #ebebeb;
+  width: 900px;
+  height: 500px;
+  margin: 20px;
+  border: 1px solid #bbbbbb;
+  box-sizing: content-box;
+  position: relative;
+  overflow: hidden;
+}
+
+#translation {
+  background-color: rgba(0, 100, 0, 0.2);
+  position: relative;
+  height: 100%;
+  width: 100%;
+  
+  transform: translate(0, 0);
+}
+
+#image {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#canvas {
+  background-color: rgba(100, 0, 0, 0.5);
+  width: 100px;
+  height: 100px;
+  
+  
+  
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
