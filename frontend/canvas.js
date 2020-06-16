@@ -92,25 +92,25 @@ $(document).ready(function() {
         
         if (event.code == "KeyW") {
             // Up
-            translationY -= 10;
+            translationY += 10;
             trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
         }
         
         if (event.code == "KeyA") {
             // Left
-            translationX -= 10;
+            translationX += 10;
             trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
         }
         
         if (event.code == "KeyS") {
             // Down
-            translationY += 10;
+            translationY -= 10;
             trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
         }
         
         if (event.code == "KeyD") {
             // Right
-            translationX += 10;
+            translationX -= 10;
             trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
         }
         
