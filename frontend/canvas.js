@@ -60,97 +60,131 @@ $(document).ready(function() {
     });
     
     
+    function plus() {
+        // Zoom in
+        cValue += 10;
+        var img = $("#image");
+        if (widthIsClipped) {
+            img.css("width", cValue + "%");
+        } else {
+            img.css("height", cValue + "%");
+        }
+        
+        var cv = $("#canvas");
+        cv.css("width", img.width());
+        cv.css("height", img.height());
+        
+        var tagc = $("#tagcontainer");
+        tagc.css("width", img.width());
+        tagc.css("height", img.height());
+        updateTag();
+    }
+    
+    function minus() {
+        // Zoom out
+        cValue -= 10;
+        var img = $("#image");
+        if (widthIsClipped) {
+            img.css("width", cValue + "%");
+        } else {
+            img.css("height", cValue + "%");
+        }
+        
+        var cv = $("#canvas");
+        cv.css("width", img.width());
+        cv.css("height", img.height());
+        
+        var tagc = $("#tagcontainer");
+        tagc.css("width", img.width());
+        tagc.css("height", img.height());
+        updateTag();
+    }
+    
+    function reset() {
+        var trans = $("#translation");
+        // Zoom out
+        cValue = 100;
+        translationX = 0;
+        translationY = 0;
+        trans.css("transform", "translate(0, 0)");
+        var img = $("#image");
+        if (widthIsClipped) {
+            img.css("width", cValue + "%");
+        } else {
+            img.css("height", cValue + "%");
+        }
+        
+        var cv = $("#canvas");
+        cv.css("width", img.width());
+        cv.css("height", img.height());
+        
+        var tagc = $("#tagcontainer");
+        tagc.css("width", img.width());
+        tagc.css("height", img.height());
+        updateTag();
+    }
+    
+    
+    function up() {
+        var trans = $("#translation");
+        // Up
+        translationY += 10;
+        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+    }
+    
+    function left() {
+        var trans = $("#translation");
+        // Left
+        translationX += 10;
+        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+    }
+    
+    function down() {
+        var trans = $("#translation");
+        // Down
+        translationY -= 10;
+        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+    }
+    
+    function right() {
+        var trans = $("#translation");
+        // Right
+        translationX -= 10;
+        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+    }
+    
+    
     
     $(document).keypress(function(event) {
         console.log(event.code);
         
         
         if (event.code == "Period") {
-            // Zoom in
-            cValue += 10;
-            var img = $("#image");
-            if (widthIsClipped) {
-                img.css("width", cValue + "%");
-            } else {
-                img.css("height", cValue + "%");
-            }
-            
-            var cv = $("#canvas");
-            cv.css("width", img.width());
-            cv.css("height", img.height());
-            
-            var tagc = $("#tagcontainer");
-            tagc.css("width", img.width());
-            tagc.css("height", img.height());
-            updateTag();
+            plus();
         }
         
         if (event.code == "Comma") {
-            // Zoom out
-            cValue -= 10;
-            var img = $("#image");
-            if (widthIsClipped) {
-                img.css("width", cValue + "%");
-            } else {
-                img.css("height", cValue + "%");
-            }
-            
-            var cv = $("#canvas");
-            cv.css("width", img.width());
-            cv.css("height", img.height());
-            
-            var tagc = $("#tagcontainer");
-            tagc.css("width", img.width());
-            tagc.css("height", img.height());
-            updateTag();
+            minus();
         }
         
-        var trans = $("#translation");
         if (event.code == "Digit0") {
-            // Zoom out
-            cValue = 100;
-            translationX = 0;
-            translationY = 0;
-            trans.css("transform", "translate(0, 0)");
-            var img = $("#image");
-            if (widthIsClipped) {
-                img.css("width", cValue + "%");
-            } else {
-                img.css("height", cValue + "%");
-            }
-            
-            var cv = $("#canvas");
-            cv.css("width", img.width());
-            cv.css("height", img.height());
-            
-            var tagc = $("#tagcontainer");
-            tagc.css("width", img.width());
-            tagc.css("height", img.height());
-            updateTag();
+            reset();
         }
         
         if (event.code == "KeyW") {
-            // Up
-            translationY += 10;
-            trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+            up();
         }
         
         if (event.code == "KeyA") {
-            // Left
-            translationX += 10;
-            trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+            left();
         }
         
         if (event.code == "KeyS") {
-            // Down
-            translationY -= 10;
-            trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+            down();
         }
         
         if (event.code == "KeyD") {
-            // Right
-            translationX -= 10;
-            trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+            right();
         }
         
         
@@ -158,8 +192,14 @@ $(document).ready(function() {
     
     
     
+    $("#plus").click(plus);
+    $("#minus").click(minus);
+    $("#reset").click(reset);
     
-    
+    $("#up").click(up);
+    $("#left").click(left);
+    $("#down").click(down);
+    $("#right").click(right);
     
     
     
@@ -253,13 +293,24 @@ $(document).ready(function() {
         var rateX = Number(cv.css("width").slice(0, -2)) / canvas.width;
         var rateY = Number(cv.css("height").slice(0, -2)) / canvas.height;
         
-        coord.x = (event.x - canvas.getBoundingClientRect().left) / rateX;
-        coord.y = (event.y - canvas.getBoundingClientRect().top) / rateY;
-        console.log(coord.x, coord.y);
+        if (event.touches == null) {
+            
+            coord.x = (event.x - canvas.getBoundingClientRect().left) / rateX;
+            coord.y = (event.y - canvas.getBoundingClientRect().top) / rateY;
+            console.log(coord.x, coord.y);
+        } else {
+            
+            coord.x = (event.touches[0].clientX - canvas.getBoundingClientRect().left) / rateX;
+            coord.y = (event.touches[0].clientY - canvas.getBoundingClientRect().top) / rateY;
+            console.log(coord.x, coord.y);
+            
+        }
         
         
-        //coord.x = event.touches[0].clientX - canvas.offsetLeft;
-        //coord.y = event.touches[0].clientY - canvas.offsetTop;
+        
+        
+        
+        
         
         
         if (Number.isNaN(startX) || coord.x < startX) {
@@ -367,11 +418,11 @@ $(document).ready(function() {
     canvas.addEventListener('mouseout', stopPainting, { passive: false });
     canvas.addEventListener('mousemove', sketch, { passive: false });
     
-    /*
+    
     canvas.addEventListener('touchstart', startPainting, { passive: false });
     canvas.addEventListener('touchend', stopPainting, { passive: false });
     canvas.addEventListener('touchmove', sketch, { passive: false });
-    */
+    
     
     
     
