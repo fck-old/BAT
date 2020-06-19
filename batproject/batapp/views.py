@@ -19,11 +19,14 @@ def upload_image(request):
             picture = form.save()
             # picture.uploaded_by = request.user
             picture.upload_date = timezone.now()
-            picture.status = 'untagged'
+            #a = StatusPicture.objects.all()
+            #for i in a:
+                #i.delete()
+            picture.status = StatusPicture.objects.get(status_type='untagged')
             print(picture.upload_date)
             picture.save()
             header_ut = StatusPicture.objects.get(status_type='untagged')
-            header_ut.pictures = header_ut.pictures.order_by('-upload_date')
+            header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
             header_ut.save()
             return HttpResponse('upload successful')
 
@@ -59,7 +62,7 @@ def initialise_status_types(request):
     s.save()
     s = StatusPicture(status_type='tagged')
     s.save()
-
+    return HttpResponse('initialising successful')
 
 """@login_required()
 def get_untagged_picture(request):

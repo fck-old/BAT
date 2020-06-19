@@ -11,10 +11,10 @@ class StatusPicture(models.Model):
 class Picture(models.Model):
     picture_path_file = models.ImageField(upload_to='images/')
     label = models.CharField(max_length=200, default='add label')
-    upload_date = models.DateTimeField('date uploaded')
-    status = models.ForeignKey(StatusPicture, related_name='pictures', on_delete=models.CASCADE)
+    upload_date = models.DateTimeField('date uploaded', null=True)
+    status = models.ForeignKey(StatusPicture, related_name='pictures', on_delete=models.CASCADE, null=True)
     #uploaded_by = models.ForeignKey(User, related_name='uploaded')
-    
+
 
 class Muell(models.Model):
     status_type = models.CharField(max_length=20, default='tba')
