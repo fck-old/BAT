@@ -6,4 +6,4 @@ class PictureForm(forms.ModelForm):
 
     class Meta:
         model = Picture
-        fields = ['picture_path_file']
+        fields = ['picture_path_file', 'label']
