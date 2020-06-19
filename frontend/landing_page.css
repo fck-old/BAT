@@ -34,6 +34,15 @@ body {
   height: 200px;
 }
 
+#logo_text {
+  height: 80px;
+  margin-left: 50px;
+  margin-right: 50px;
+  display: inline;
+  position: relative;
+  top: 10px;
+}
+
 #bat {
   font-size: 80px;
   font-family: "Impact";
