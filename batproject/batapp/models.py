@@ -14,6 +14,9 @@ class Picture(models.Model):
     upload_date = models.DateTimeField('date uploaded')
     status = models.ForeignKey(StatusPicture, related_name='pictures', on_delete=models.CASCADE)
     #uploaded_by = models.ForeignKey(User, related_name='uploaded')
+    
 
+class Muell(models.Model):
+    status_type = models.CharField(max_length=20, default='tba')
 
 
