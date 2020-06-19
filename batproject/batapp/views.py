@@ -31,7 +31,7 @@ def upload_image(request):
             return HttpResponse('upload successful')
 
     form = PictureForm()
-    print("Hallo")
+    #print("Hallo")
     return render(request, 'image.html', {'form': form})
 
 
@@ -39,9 +39,11 @@ def upload_image(request):
 def get_all_images(request):
 
     pictures = Picture.objects.all()
-    for p in pictures:
-        print("Das steht in der Datenbank:")
-        print(p.picture_path_file.url)
+    #for p in pictures:
+        #print("Das steht in der Datenbank:")
+        #print(p.picture_path_file.url)
+        #print("Und das ist die id des Bildes:")
+        #print(p.id)
         # p.picture_path_file = 'http://127.0.0.1:8000/batapp' + p.picture_path_file.url # hier geaendert
         # print('Das wird zusammengefuegt:')
         # print('http://127.0.0.1:8000/batapp' + ([str)p.picture_path_file)  # hier geaendert
@@ -77,25 +79,29 @@ def get_untagged_picture(request):
         return render(request, 'getimage.html', {'p': pic})
     
     else:
+        #print("Nummer des letzten Bildes:")
+        #print(request.user.last_picture)
         untagged_p = StatusPicture.objects.get(status_type='untagged')
         in_progress_p = StatusPicture.objects.get(status_type='in_progress')
-        last_pic = in_progress_p.pictures.get(id=request.user.last_picture)
+        picture_list = Picture.objects.all()
+        last_pic = Picture.objects.get(id=request.user.last_picture)
         #date = last_pic.upload_date
-        i_pic = untagged_p.pictures
-        for p in i_pic:
-            if p.upload_date > last_pic.upload_date:
+        #i_pic = untagged_p.pictures
+        for p in picture_list:
+            if (p.upload_date > last_pic.upload_date) & (p.status == untagged_p):
                 p.status = in_progress_p
                 p.save()
                 request.user.last_picture = p.id
+                request.user.save()
                 last_pic.status = untagged_p
                 last_pic.save()
-                untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
-                untagged_p.save()                
-                return render(request, 'getimages.html', {'pictures': p})
+                #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
+                #untagged_p.save()
+                return render(request, 'getimage.html', {'p': p})
         request.user.last_picture = -1
+        request.user.save()
         last_pic.status = untagged_p
         last_pic.save()
-        untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
-        untagged_p.save()
-        """Fehler-Meldung muss noch gemacht werden"""
-        return render(request, 'functionality.html')
+        #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
+        #untagged_p.save()
+        return HttpResponse('Keine weiteren Bilder, die nicht getagged sind')
