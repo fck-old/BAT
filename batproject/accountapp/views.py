@@ -16,7 +16,7 @@ from .models import User
 
 def signup(request):
     if request.method == 'POST':
-        form = ChangeProfileForm(request.POST)
+        form = SignUpForm(request.POST)
         print("ist Form valide?")
         if form.is_valid():
             print("Form ist valide")
