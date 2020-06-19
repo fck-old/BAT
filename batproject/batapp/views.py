@@ -64,22 +64,25 @@ def initialise_status_types(request):
     s.save()
     return HttpResponse('initialising successful')
 
-"""@login_required()
+@login_required()
 def get_untagged_picture(request):
     if request.user.last_picture == -1:
-        untagged_p = StatusPicture.get(status_type='untagged')
-        in_progress_p = StatusPicture.get(status_type='in_progress')
-        pic = untagged_p.pictures.first 
+        untagged_p = StatusPicture.objects.get(status_type='untagged')
+        in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+        pic = untagged_p.pictures.first()
         pic.status = in_progress_p
-        pic.save()        
-        return render(request, 'getimages.html', {'pictures': pic})
+        pic.save()
+        request.user.last_picture = pic.id
+        request.user.save()
+        return render(request, 'getimage.html', {'p': pic})
     
     else:
-        untagged_p = StatusPicture.get(status_type='untagged')
-        in_progress_p = StatusPicture.get(status_type='in_progress')
+        untagged_p = StatusPicture.objects.get(status_type='untagged')
+        in_progress_p = StatusPicture.objects.get(status_type='in_progress')
         last_pic = in_progress_p.pictures.get(id=request.user.last_picture)
-        date = last_pic.upload_date
-        for p in untagged_p.pictures:
+        #date = last_pic.upload_date
+        i_pic = untagged_p.pictures
+        for p in i_pic:
             if p.upload_date > last_pic.upload_date:
                 p.status = in_progress_p
                 p.save()
@@ -94,5 +97,5 @@ def get_untagged_picture(request):
         last_pic.save()
         untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
         untagged_p.save()
-        """"""Fehler-Meldung muss noch gemacht werden
-        return render(request, 'functionality.html')"""
+        """Fehler-Meldung muss noch gemacht werden"""
+        return render(request, 'functionality.html')
