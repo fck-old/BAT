@@ -7,7 +7,7 @@ from django.template import loader
 from django.utils import timezone
 
 from batapp.forms import PictureForm
-from .models import Picture, StatusPicture
+from .models import Picture, StatusPicture, Muell
 
 
 @login_required
@@ -58,12 +58,17 @@ def functionality(request):
 @login_required()
 def initialise_status_types(request):
 
+    """if Muell.objects.first() is None:
+        return HttpResponse('Muell is None')"""
+
+    if StatusPicture.objects.first() is not None:
+        return HttpResponse('already initialised')
     s = StatusPicture(status_type='untagged')
     s.save()
-    s = StatusPicture(status_type='in_progress')
-    s.save()
-    s = StatusPicture(status_type='tagged')
-    s.save()
+    t = StatusPicture(status_type='in_progress')
+    t.save()
+    u = StatusPicture(status_type='tagged')
+    u.save()
     return HttpResponse('initialising successful')
 
 @login_required()
