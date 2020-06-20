@@ -25,9 +25,9 @@ def upload_image(request):
             picture.status = StatusPicture.objects.get(status_type='untagged')
             print(picture.upload_date)
             picture.save()
-            header_ut = StatusPicture.objects.get(status_type='untagged')
-            header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
-            header_ut.save()
+            #header_ut = StatusPicture.objects.get(status_type='untagged')
+            #header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
+            #header_ut.save()
             return HttpResponse('upload successful')
 
     form = PictureForm()
@@ -76,7 +76,7 @@ def get_untagged_picture(request):
     if request.user.last_picture == -1:
         untagged_p = StatusPicture.objects.get(status_type='untagged')
         in_progress_p = StatusPicture.objects.get(status_type='in_progress')
-        pic = untagged_p.pictures.first()
+        pic = untagged_p.pictures.order_by('upload_date').first()
         pic.status = in_progress_p
         pic.save()
         request.user.last_picture = pic.id
@@ -84,29 +84,30 @@ def get_untagged_picture(request):
         return render(request, 'getimage.html', {'p': pic})
     
     else:
-        #print("Nummer des letzten Bildes:")
-        #print(request.user.last_picture)
+        print("Nummer des letzten Bildes:")
+        print(request.user.last_picture)
         untagged_p = StatusPicture.objects.get(status_type='untagged')
         in_progress_p = StatusPicture.objects.get(status_type='in_progress')
-        picture_list = Picture.objects.all()
-        last_pic = Picture.objects.get(id=request.user.last_picture)
+        #picture_list = Picture.objects.all()
+        last_pic = in_progress_p.pictures.get(id=request.user.last_picture)
         #date = last_pic.upload_date
-        #i_pic = untagged_p.pictures
-        for p in picture_list:
-            if (p.upload_date > last_pic.upload_date) & (p.status == untagged_p):
-                p.status = in_progress_p
-                p.save()
-                request.user.last_picture = p.id
-                request.user.save()
-                last_pic.status = untagged_p
-                last_pic.save()
-                #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
-                #untagged_p.save()
-                return render(request, 'getimage.html', {'p': p})
+        new_pic = untagged_p.pictures.filter(upload_date__gt=last_pic.upload_date).order_by('upload_date').first()
+        if new_pic is not None:
+            new_pic.status = in_progress_p
+            new_pic.save()
+            request.user.last_picture = new_pic.id
+            request.user.save()
+            last_pic.status = untagged_p
+            last_pic.save()
+            #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
+            #untagged_p.save()
+            return render(request, 'getimage.html', {'p': new_pic})
         request.user.last_picture = -1
         request.user.save()
         last_pic.status = untagged_p
         last_pic.save()
+        print("Letztes Bild jetzt:")
+        print(request.user.last_picture)
         #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
         #untagged_p.save()
         return HttpResponse('Keine weiteren Bilder, die nicht getagged sind')
