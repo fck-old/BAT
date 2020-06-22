@@ -55,7 +55,7 @@ def changeProfile(request):
             user.last_name = form.cleaned_data['last_name']
             user.save()
             update_session_auth_hash(request, user)
-            return render(request, 'functionality.html', None)
+            return render(request, 'user.html', None)
     else:
         form = ChangeProfileForm()
     return render(request, 'changeProfile.html', {'form': form})
