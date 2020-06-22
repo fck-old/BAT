@@ -7,4 +7,8 @@
             <div>ausloggen: <a href= "{% url 'logout' %}"> {% url 'logout' %} </a> </div>
             <div>Bilder hochladen: <a href= "{% url 'upload' %}"> {% url 'upload' %} </a> </div>
             <div>(alle) Bilder vom Server abrufen: <a href= "{% url 'getimages' %}"> {% url 'getimages' %} </a> </div>
+            <div>Passwort ändern: <a href= "{% url 'changePassword' %}"> {% url 'changePassword' %} </a> </div>
+            <div>Profil ändern: <a href= "{% url 'changeProfile' %}"> {% url 'changeProfile' %} </a> </div>
+            <div>Account löschen: <a href= "{% url 'deleteAccount' %}"> {% url 'deleteAccount' %} </a> </div>
+            <div>ungetaggtes Bild vom Server abrufen mit der Möglichkeit zu skippen: <a href= "{% url 'get_untagged' %}"> {% url 'get_untagged' %} </a> </div>
     {% endblock %}

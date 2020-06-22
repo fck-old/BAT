@@ -1,18 +1,50 @@
 version: '3'
-    
+### variant 1    
 services:
+    #service 1 db - postgres
     db:
         image: postgres
+        #envioronment varibles
         environment:
-        - POSTGRES_DB=postgres
-        - POSTGRES_USER=postgres
-        - POSTGRES_PASSWORD=postgres
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+    #service 2 web - Django
     web:
         build: .
-        command: python batproject/manage.py runserver 0.0.0.0:8000
+        ccommand: >
+            sh -c "python batproject/manage.py migrate &&
+                python batproject/manage.py runserver 0.0.0.0:8000" 
         volumes:
-        - .:/code
+            - .:/code
         ports:
-        - "8000:8000"
+            - "8000:8000"
         depends_on:
-        - db
+            - db
+### variant 2
+# services:
+#     db:
+#         image: postgres
+#         environment:
+#         - POSTGRES_DB=postgres
+#         - POSTGRES_USER=postgres
+#         - POSTGRES_PASSWORD=postgres
+#     web:
+#         build: .
+#         command: python batproject/manage.py runserver 0.0.0.0:8000
+#         volumes:
+#         - .:/code
+#         ports:
+#         - "8000:8000"
+#         depends_on:
+#         - db
+#     migration:
+#         build: .
+#         image: app
+#         command: python manage.py migrate
+#         volumes:
+#             - .:/code
+#         links:
+#             - db
+#         depends_on:
+#             - db

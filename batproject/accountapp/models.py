@@ -7,5 +7,9 @@ from django.contrib.auth.models import AbstractUser
 
 
 class User(AbstractUser):
-    role = models.CharField(max_length=20, blank=True)
+    last_picture = models.IntegerField(default=-1)
+
+
+class Muell(models.Model):
+    muellzeille = models.IntegerField(default=-1)
 
