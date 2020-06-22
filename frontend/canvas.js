@@ -156,7 +156,7 @@ $(document).ready(function() {
     
     
     $(document).keypress(function(event) {
-        console.log(event.code);
+        
         
         
         if (event.code == "Period") {
@@ -297,12 +297,12 @@ $(document).ready(function() {
             
             coord.x = (event.x - canvas.getBoundingClientRect().left) / rateX;
             coord.y = (event.y - canvas.getBoundingClientRect().top) / rateY;
-            console.log(coord.x, coord.y);
+            
         } else {
             
             coord.x = (event.touches[0].clientX - canvas.getBoundingClientRect().left) / rateX;
             coord.y = (event.touches[0].clientY - canvas.getBoundingClientRect().top) / rateY;
-            console.log(coord.x, coord.y);
+            
             
         }
         
@@ -333,8 +333,13 @@ $(document).ready(function() {
     // The following functions toggle the flag to start
     // and stop drawing
     function startPainting(event){
-        console.log("start");
+        if (event.touches != null && event.touches.length > 1) {
+            event.preventDefault();
+            return;
+        }
         console.log(event);
+        
+        
         paint = true;
         getPosition(event);
         window.tmp = event;
@@ -342,7 +347,7 @@ $(document).ready(function() {
     }
 
     function stopPainting(){
-        console.log("stop");
+        
         paint = false;
         event.preventDefault();
         updateTag();
@@ -356,7 +361,7 @@ $(document).ready(function() {
         
         var rateX = Number(cv.css("width").slice(0, -2)) / canvas.width;
         var rateY = Number(cv.css("height").slice(0, -2)) / canvas.height;
-        console.log(rateX, rateY);
+        
         
         
         if (!Number.isNaN(startX)) {
@@ -377,7 +382,6 @@ $(document).ready(function() {
         if (!paint) return;
         
         
-        //console.log("sketch");
         ctx.beginPath();
         
         ctx.lineWidth = 10;
@@ -424,7 +428,10 @@ $(document).ready(function() {
     canvas.addEventListener('touchmove', sketch, { passive: false });
     
     
-    
+    $("#container")[0].addEventListener("gesturestart", function(event) {
+        console.log(event);
+        event.stopPropagation();
+    }, false);
     
     
     
