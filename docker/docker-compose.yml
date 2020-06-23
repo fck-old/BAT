@@ -12,7 +12,7 @@ services:
     #service 2 web - Django
     web:
         build: .
-        ccommand: >
+        command: >
             sh -c "python batproject/manage.py migrate &&
                 python batproject/manage.py runserver 0.0.0.0:8000" 
         volumes:
