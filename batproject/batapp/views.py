@@ -10,6 +10,11 @@ from batapp.forms import PictureForm
 from .models import Picture, StatusPicture, Muell
 
 
+def index(request):
+    return render(request, 'batapp/index.html')
+
+
+
 @login_required
 def upload_image(request):
 
