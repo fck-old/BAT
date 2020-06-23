@@ -27,7 +27,7 @@ def signup(request):
     else:
         form = SignUpForm()
         print("gib html aus")
-    return render(request, 'signup.html', {'form': form})
+    return render(request, 'accountapp/signup.html', {'form': form})
 
 
 @login_required
