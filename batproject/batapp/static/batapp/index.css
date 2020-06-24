@@ -4,15 +4,18 @@ body {
   user-select: none;
 }
 
+html {
+  background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
+}
+
 body {
   display: -ms-flexbox;
   display: flex;
   color: #fff;
   text-shadow: 0 .05rem .1rem rgba(0, 0, 0, .5);
   box-shadow: inset 0 0 5rem rgba(0, 0, 0, .3);
-  background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
   background-image: url("img/background.png");
-  background-color: black;
+  background-color: transparent;
   background-size: 300px;
   background-repeat: repeat;
 }
