@@ -2,8 +2,8 @@ html,
 body {
   height: 100%;
   min-width: 320px;
-  background: rgb(24,23,27);
   background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
+  background-color: rgb(24,23,27);
   color: white;
 }
 

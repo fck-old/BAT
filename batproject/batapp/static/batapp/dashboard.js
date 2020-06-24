@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    // globals
+    // Globals
     var isPortrait = false; // portrait image => width is set to 100%, otherwise height 100%
     var zoom = 100; // in percent
     var translationX = 0; // in pixel
@@ -127,9 +127,233 @@ $(document).ready(function() {
     
     
     
+    /*
+     *
+     * Touch Support
+     *
+     */
+    $canvas.on("touchstart", startDrawing);
+    $canvas.on("touchend", stopDrawing);
+    $canvas.on("touchmove", draw);
+    $canvas.on("touchcancel", cancelDrawing);
+    
+    var drawing = false;
+    var lastCoord = {x: 0, y: 0};
+    
+    var backupStartX;
+    var backupStartY;
+    var backupStopX;
+    var backupStopY;
+    
+    function startDrawing(event) {
+        event.preventDefault();
+        
+        backupStartX = coords.start.x;
+        backupStartY = coords.start.y;
+        backupStopX = coords.stop.x;
+        backupStopY = coords.stop.y;
+        
+        resetCoords();
+        processDrawCoord(event);
+        drawing = true;
+    }
+    
+    function stopDrawing(event) {
+        event.preventDefault();
+        
+        if (!drawing) {
+            return;
+        }
+        
+        drawing = false;
+        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
+        redraw();
+    }
+    
+    function draw(event) {
+        event.preventDefault();
+        
+        if (!drawing) {
+            return;
+        }
+        
+        ctx.beginPath();
+        ctx.lineWidth = 5; // TODO
+        ctx.lineCap = "round";
+        ctx.strokeStyle = "rgba(248, 181, 0, 1)"; // TODO
+        ctx.moveTo(lastCoord.x, lastCoord.y);
+        processDrawCoord(event);
+        ctx.lineTo(lastCoord.x , lastCoord.y);
+        ctx.stroke();
+    }
+    
+    function cancelDrawing(event) {
+        event && event.preventDefault();
+        
+        if (!drawing) {
+            return;
+        }
+        
+        drawing = false;
+        coords.start.x = backupStartX;
+        coords.start.y = backupStartY;
+        coords.stop.x = backupStopX;
+        coords.stop.y = backupStopY;
+        
+        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
+        redraw();
+    }
+    
+    function processDrawCoord(event) {
+        var x = (event.originalEvent.touches[0].clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
+        var y = (event.originalEvent.touches[0].clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
+        
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (x > $image[0].naturalWidth) x = $image[0].naturalWidth;
+        if (y > $image[0].naturalHeight) y = $image[0].naturalHeight;
+        
+        lastCoord.x = x;
+        lastCoord.y = y;
+        addCoord(lastCoord);
+    }
+    
+    
+    // Zooming and panning
+    var gestureStartZoom;
+    var gestureStartFingerPosX;
+    var gestureStartFingerPosY;
+    var gestureStartXValue;
+    var gestureStartYValue;
+    
+    $(document).on("gesturestart", function(event) {
+        event.preventDefault();
+        
+        if (drawing) {
+            cancelDrawing();
+        }
+        
+        gestureStartZoom = zoom;
+        gestureStartFingerPosX = event.clientX;
+        gestureStartFingerPosY = event.clientY;
+        gestureStartXValue = translationX;
+        gestureStartYValue = translationY;
+    });
+    
+    $(document).on("gesturechange", function(event) {
+        event.preventDefault();
+        
+        if (drawing) {
+            cancelDrawing();
+        }
+        
+        // Zoom
+        zoom = gestureStartZoom * event.originalEvent.scale;
+        
+        // Translate
+        var deltaX = event.clientX - gestureStartFingerPosX;
+        var deltaY = event.clientY - gestureStartFingerPosY;
+        translationX = gestureStartXValue + deltaX;
+        translationY = gestureStartYValue + deltaY;
+        
+        // Redraw
+        redraw();
+    });
+    
+    $(document).on("gestureend", function(event) {
+        event.preventDefault();
+        
+        if (drawing) {
+            cancelDrawing();
+        }
+    });
     
     
     
+    /*
+     *
+     * Mouse Support
+     *
+     */
+    $canvas.on("mousedown", startRecting);
+    $(document).on("mouseup", stopRecting);
+    $(document).on("mouseout", rect);
+    $(document).on("mousemove", rect);
+    
+    var recting = false;
+    var startCoord;
+    
+    function startRecting(event) {
+        event.preventDefault();
+        
+        startCoord = getRectCoord(event);
+        
+        resetCoords();
+        addCoord(startCoord);
+        
+        recting = true;
+        redraw();
+    }
+    
+    function stopRecting(event) {
+        event.preventDefault();
+        
+        if (!recting) {
+            return;
+        }
+        
+        resetCoords();
+        addCoord(startCoord);
+        addCoord(getRectCoord(event));
+        
+        recting = false;
+        redraw();
+    }
+    
+    function rect(event) {
+        event.preventDefault();
+        
+        if (!recting) {
+            return;
+        }
+        
+        resetCoords();
+        addCoord(startCoord);
+        addCoord(getRectCoord(event));
+        
+        redraw();
+    }
+    
+    function getRectCoord(event) {
+        var x = (event.clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
+        var y = (event.clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
+        
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (x > $image[0].naturalWidth) x = $image[0].naturalWidth;
+        if (y > $image[0].naturalHeight) y = $image[0].naturalHeight;
+        
+        return {x: x, y: y};
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    // TODO
     
     
     // Enable picture buttons
@@ -222,315 +446,5 @@ $(document).ready(function() {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-     * Touch Support
-     */
-    $canvas.on("touchstart", startDrawing);
-    $canvas.on("touchend", stopDrawing);
-    $canvas.on("touchmove", draw);
-    $canvas.on("touchcancel", cancelDrawing);
-    
-    
-    var gestureStartZoom;
-    var gestureStartFingerPosX;
-    var gestureStartFingerPosY;
-    var gestureStartXValue;
-    var gestureStartYValue;
-    window.document.addEventListener("gesturestart", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelDrawing();
-        }
-        
-        gestureStartZoom = zoom;
-        gestureStartFingerPosX = event.clientX;
-        gestureStartFingerPosY = event.clientY;
-        gestureStartXValue = translationX;
-        gestureStartYValue = translationY;
-    }, false);
-    
-    window.document.addEventListener("gesturechange", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelDrawing();
-        }
-        
-        // Zoom
-        zoom = gestureStartZoom * event.scale;
-        
-        // Translate
-        var deltaX = event.clientX - gestureStartFingerPosX;
-        var deltaY = event.clientY - gestureStartFingerPosY;
-        translationX = gestureStartXValue + deltaX;
-        translationY = gestureStartYValue + deltaY;
-        
-        // Redraw
-        redraw();
-        
-        
-        
-        
-    }, false);
-    
-    window.document.addEventListener("gestureend", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelDrawing();
-        }
-    }, false);
-    
-    
-    
-    
-    
-    
-    
-    // Stores the initial position of the cursor
-    let coord = {x:0 , y:0};
-
-    // This is the flag that we are going to use to
-    // trigger drawing
-    let paint = false;
-
-
-
-
-
-
-
-    var startX = NaN;
-    var startY = NaN;
-    var stopX = NaN;
-    var stopY = NaN;
-    var backupStartX = NaN;
-    var backupStartY = NaN;
-    var backupStopX = NaN;
-    var backupStopY = NaN;
-
-
-
-       
-    // Updates the coordianates of the cursor when
-    // an event e is triggered to the coordinates where
-    // the said event is triggered.
-    function getPosition(event){
-        coord.x = (event.touches[0].clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
-        coord.y = (event.touches[0].clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
-        
-        
-        if (Number.isNaN(startX) || coord.x < startX) {
-            startX = coord.x;
-        }  
-        
-        if (Number.isNaN(startY) || coord.y < startY) {
-            startY = coord.y;
-        }
-        
-        if (Number.isNaN(stopX) || coord.x > stopX) {
-            stopX = coord.x;
-        }
-        
-        if (Number.isNaN(stopY) || coord.y > stopY) {
-            stopY = coord.y;
-        }
-    }
-
-    // The following functions toggle the flag to start
-    // and stop drawing
-    function startDrawing(event){
-        backupStartX = startX;
-        backupStartY = startY;
-        backupStopX = stopX;
-        backupStopY = stopY;
-        startX = NaN;
-        startY = NaN;
-        stopX = NaN;
-        stopY = NaN;
-        
-        event.preventDefault();
-        
-        paint = true;
-        getPosition(event);
-        window.tmp = event;
-    }
-
-    function stopDrawing(event){
-        event.preventDefault();
-        
-        paint = false;
-        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
-        redraw();
-    }
-    
-    function cancelDrawing(){
-        console.log("cancelling");
-        
-        paint = false;
-        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
-        
-        // restore backup
-        startX = backupStartX;
-        startY = backupStartY;
-        stopX = backupStopX;
-        stopY = backupStopY;
-        
-        redraw();
-    }
-       
-    function draw(event){
-        event.preventDefault();
-        
-        if (!paint) return;
-        
-        
-        ctx.beginPath();
-        
-        ctx.lineWidth = 10;
-        
-        // Sets the end of the lines drawn
-        // to a round shape.
-        ctx.lineCap = 'round';
-        
-        ctx.strokeStyle = 'rgba(248, 181, 0, 1)';
-        
-        // The cursor to start drawing
-        // moves to this coordinate
-        ctx.moveTo(coord.x, coord.y);
-        
-        // The position of the cursor
-        // gets updated as we move the
-        // mouse around.
-        getPosition(event);
-        
-        // A line is traced from start
-        // coordinate to this coordinate
-        ctx.lineTo(coord.x , coord.y);
-        
-        // Draws the line.
-        ctx.stroke();
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
     $("#b1").click();
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    /*
-     *  Mouse Support
-     */
-    $canvas.on("mousedown", startRecting);
-    $canvas.on("mouseup", stopRecting);
-    $canvas.on("mouseout", rect);
-    $canvas.on("mousemove", rect);
-    
-    var recting = false;
-    var startCoord;
-    
-    function startRecting(event) {
-        event.preventDefault();
-        
-        startCoord = getRectCoord(event);
-        
-        resetCoords();
-        addCoord(startCoord);
-        
-        recting = true;
-        redraw();
-    }
-    
-    function stopRecting(event) {
-        event.preventDefault();
-        
-        if (!recting) {
-            return;
-        }
-        
-        resetCoords();
-        addCoord(startCoord);
-        addCoord(getRectCoord(event));
-        
-        recting = false;
-        redraw();
-    }
-    
-    function rect(event) {
-        event.preventDefault();
-        
-        if (!recting) {
-            return;
-        }
-        
-        resetCoords();
-        addCoord(startCoord);
-        addCoord(getRectCoord(event));
-        
-        redraw();
-    }
-    
-    function getRectCoord(event) {
-        var x = (event.clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
-        var y = (event.clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
-        
-        if (x < 0) x = 0;
-        if (y < 0) y = 0;
-        if (x > $image.width()) x = $image.width();
-        if (y > $image.height()) y = $image.height();
-        
-        return {x: x, y: y};
-    }
 });
