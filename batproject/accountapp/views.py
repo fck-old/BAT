@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, update_session_auth_hash
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import SignUpForm, ChangeProfileForm
+from .forms import SignUpForm, ChangeProfileForm, LoginForm
 from .models import User
 
 
@@ -28,6 +28,21 @@ def signup(request):
         form = SignUpForm()
         print("gib html aus")
     return render(request, 'accountapp/signup.html', {'form': form})
+
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        print("ist Form valide?")
+        if form.is_valid():
+            print("Form ist valide")
+            form_bat_user = form.save()
+            auth_login(request, form_bat_user)
+            context = {'username': request.user.username}
+            return render(request, 'user.html', context)
+    else:
+        form = LoginForm()
+        print("gib html aus")
+    return render(request, 'accountapp/login.html', {'form': form})
 
 
 @login_required
