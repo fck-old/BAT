@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.template import loader
@@ -11,8 +11,13 @@ from .models import Picture, StatusPicture, Muell
 
 
 def index(request):
-    return render(request, 'batapp/index.html')
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    else:
+        return render(request, 'batapp/index.html')
 
+
+@login_required
 def dashboard(request):
     return render(request, 'batapp/dashboard.html')
 

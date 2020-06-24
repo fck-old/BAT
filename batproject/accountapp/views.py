@@ -23,7 +23,7 @@ def signup(request):
             form_bat_user = form.save()
             auth_login(request, form_bat_user)
             context = {'username': request.user.username, 'email': request.user.email}
-            return render(request, 'user.html', context)
+            return redirect('dashboard')
         else:
             print("form is not valid")
     else:
