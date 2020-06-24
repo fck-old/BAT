@@ -185,9 +185,9 @@ $(document).ready(function() {
         }
         
         ctx.beginPath();
-        ctx.lineWidth = 5; // TODO
+        ctx.lineWidth = 2 / cFactor;
+        ctx.strokeStyle = "#F8B500";
         ctx.lineCap = "round";
-        ctx.strokeStyle = "rgba(248, 181, 0, 1)"; // TODO
         ctx.moveTo(lastCoord.x, lastCoord.y);
         processDrawCoord(event);
         ctx.lineTo(lastCoord.x , lastCoord.y);
