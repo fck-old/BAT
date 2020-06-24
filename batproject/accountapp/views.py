@@ -39,6 +39,8 @@ def login(request):
             auth_login(request, form_bat_user)
             context = {'username': request.user.username}
             return render(request, 'user.html', context)
+        else:
+            print("not valid")
     else:
         form = LoginForm()
         print("gib html aus")
