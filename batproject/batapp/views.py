@@ -123,4 +123,4 @@ def get_untagged_picture(request):
         print(request.user.last_picture)
         #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
         #untagged_p.save()
-        return HttpResponse('Keine weiteren Bilder, die nicht getagged sind')
+        return HttpResponse('{"url": "", "label": "", "image": false}')

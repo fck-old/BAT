@@ -486,5 +486,34 @@ $(document).ready(function() {
     
     
     
-    $("#b1").click();
+    
+    
+    
+    
+    
+    function getImage() {
+        $.get( "/untagged/", function(data) {
+          var data = JSON.parse(data);
+          
+          if (data.image) {
+            loadImage(data.url);
+            $("#totag").text(data.label);
+          } else {
+            setTimeout(function() {
+                getImage();
+            }, 200);
+          }
+          
+        });
+    }
+    
+    
+    $("#skip").click(function() {
+        getImage();
+    });
+    
+    
+    getImage();
+    
+    
 });
