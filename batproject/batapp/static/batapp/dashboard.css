@@ -1,6 +1,7 @@
 html,
 body {
   height: 100%;
+  min-width: 320px;
   background: rgb(24,23,27);
   background: linear-gradient(180deg, rgba(24,23,27,1) 0%, rgba(0,0,0,1) 100%);
   color: white;
@@ -11,7 +12,7 @@ body {
 }
 
 #navbar {
-  background-color: #9DA39A;
+  background-color: #787e77;
 }
 
 .navbar-dark .navbar-nav .nav-link {
@@ -40,11 +41,6 @@ body {
 
 .totag {
   color: #f7b500;
-}
-
-#main {
-  position: relative;
-  height: 100%;
 }
 
 #image-container {
@@ -102,7 +98,7 @@ body {
 
 @media (max-width: 767.98px) {
   .sidebar {
-    top: 5rem;
+    top: 1rem;
   }
 }
 
@@ -137,8 +133,6 @@ body {
   padding-top: .75rem;
   padding-bottom: .75rem;
   font-size: 1rem;
-  background-color: rgba(0, 0, 0, .25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
 }
 
 .navbar .navbar-toggler {
@@ -151,14 +145,6 @@ body {
   margin-left: 5px;
   border-width: 0;
   border-radius: 0;
-}
-
-.navbar .form-control::placeholder {
-  color: rgba(255,255,255,.5)
-}
-
-.navbar .form-control:focus::placeholder {
-  color: rgba(0,0,0,.5)
 }
 
 .form-control-dark {
@@ -175,3 +161,85 @@ body {
 
 
 
+
+
+
+
+
+
+
+
+#main-container, #main-row {
+  margin: 0;
+  padding: 0;
+}
+
+#main {
+  position: relative;
+  height: 100%;
+  padding: 0;
+}
+
+
+
+
+#todo-buttons {
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+}
+
+/* CANVAS */
+#container {
+  border-top: 1px solid #ebebeb;
+  width: 100%;
+  height: calc(100% - 70px);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  #container {
+    height: calc(100% - 95px);
+    border: 1px solid #ebebeb;
+  }
+}
+
+#translation {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform: translate(0, 0);
+}
+
+#image, #canvas, #tagcontainer {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#tag {
+    position: absolute;
+    border: 2px solid yellow;
+    top: 0;
+    visibility: hidden;
+}
+
+.empty #translation {
+  visibility: hidden;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  visibility: hidden;
+}
+
+.empty #loading {
+  visibility: visible;
+}

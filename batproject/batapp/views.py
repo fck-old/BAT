@@ -13,6 +13,9 @@ from .models import Picture, StatusPicture, Muell
 def index(request):
     return render(request, 'batapp/index.html')
 
+def dashboard(request):
+    return render(request, 'batapp/dashboard.html')
+
 
 
 @login_required
