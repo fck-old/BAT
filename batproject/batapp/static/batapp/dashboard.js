@@ -4,30 +4,96 @@ $(document).ready(function() {
     var zoom = 100; // in percent
     var translationX = 0; // in pixel
     var translationY = 0; // in pixel
+    var cFactor = 1; // canvas displayed size in relation to real size
     
     // DOM elements
     var $image = $("#image");
+    var $trans = $("#translation");
+    var $canvas = $("#canvas");
+    var $tagcontainer = $("#tagcontainer");
+    var $tag = $("#tag");
     
     
     
     
-});
-
-
-
-
-
-
-
-$(document).ready(function() {
+    
+    
+    
+    
+    function redraw() {
+        // Translate
+        $trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        
+        // Zoom
+        if (isPortrait) {
+            $image.css("width", zoom + "%");
+        } else {
+            $image.css("height", zoom + "%");
+        }
+        
+        var width = $image.width();
+        var height = $image.height();
+        
+        $canvas.css("width", width);
+        $canvas.css("height", height);
+        
+        $tagcontainer.css("width", width);
+        $tagcontainer.css("height", height);
+        
+        cFactor = width / canvas.width;
+        
+        if (!Number.isNaN(startX)) {
+            $tag.css("visibility", "visible");
+            $tag.css("top", (startY * cFactor));
+            $tag.css("left", (startX * cFactor));
+            $tag.css("width", (stopX - startX) * cFactor);
+            $tag.css("height", (stopY - startY) * cFactor);
+        } else {
+            $tag.css("visibility", "hidden");
+        }
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     setTimeout(function() {$("#b2").click();}, 500);
+    window.addEventListener("resize", function() {
+        redraw();
+    });
     
-    
-    
-    var widthIsClipped = false;
-    var cValue = 100;
-    var translationX = 0;
-    var translationY = 0;
     
     
     $("#image").bind("load", function() {
@@ -35,7 +101,7 @@ $(document).ready(function() {
         startY = NaN;
         stopX = NaN;
         stopY = NaN;
-        updateTag();
+        redraw();
         
         
         var img = $("#image");
@@ -54,8 +120,8 @@ $(document).ready(function() {
             cv.css("height", img.height());
             tagc.css("width", ct.width());
             tagc.css("height", img.height());
-            widthIsClipped = true;
-            cValue = 100;
+            isPortrait = true;
+            zoom = 100;
             translationX = 0;
             translationY = 0;
             trans.css("transform", "translate(0, 0)");
@@ -66,8 +132,8 @@ $(document).ready(function() {
             cv.css("width", img.width());
             tagc.css("height", ct.height());
             tagc.css("width", img.width());
-            widthIsClipped = false;
-            cValue = 100;
+            isPortrait = false;
+            zoom = 100;
             translationX = 0;
             translationY = 0;
             trans.css("transform", "translate(0, 0)");
@@ -86,95 +152,42 @@ $(document).ready(function() {
     
     function plus() {
         // Zoom in
-        cValue += 10;
-        var img = $("#image");
-        if (widthIsClipped) {
-            img.css("width", cValue + "%");
-        } else {
-            img.css("height", cValue + "%");
-        }
-        
-        var cv = $("#canvas");
-        cv.css("width", img.width());
-        cv.css("height", img.height());
-        
-        var tagc = $("#tagcontainer");
-        tagc.css("width", img.width());
-        tagc.css("height", img.height());
-        updateTag();
+        zoom += 10;
+        redraw();
     }
     
     function minus() {
         // Zoom out
-        cValue -= 10;
-        var img = $("#image");
-        if (widthIsClipped) {
-            img.css("width", cValue + "%");
-        } else {
-            img.css("height", cValue + "%");
-        }
-        
-        var cv = $("#canvas");
-        cv.css("width", img.width());
-        cv.css("height", img.height());
-        
-        var tagc = $("#tagcontainer");
-        tagc.css("width", img.width());
-        tagc.css("height", img.height());
-        updateTag();
+        zoom -= 10;
+        redraw();
     }
     
     function reset() {
-        var trans = $("#translation");
-        // Zoom out
-        cValue = 100;
+        zoom = 100;
         translationX = 0;
         translationY = 0;
-        trans.css("transform", "translate(0, 0)");
-        var img = $("#image");
-        if (widthIsClipped) {
-            img.css("width", cValue + "%");
-        } else {
-            img.css("height", cValue + "%");
-        }
-        
-        var cv = $("#canvas");
-        cv.css("width", img.width());
-        cv.css("height", img.height());
-        
-        var tagc = $("#tagcontainer");
-        tagc.css("width", img.width());
-        tagc.css("height", img.height());
-        updateTag();
+        redraw();
     }
     
     
     function up() {
-        var trans = $("#translation");
-        // Up
         translationY += 10;
-        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        redraw();
     }
     
     function left() {
-        var trans = $("#translation");
-        // Left
         translationX += 10;
-        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        redraw();
     }
     
     function down() {
-        var trans = $("#translation");
-        // Down
         translationY -= 10;
-        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        redraw();
     }
     
     function right() {
-        var trans = $("#translation");
-        // Right
         translationX -= 10;
-        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        redraw();
     }
     
     
@@ -277,12 +290,7 @@ $(document).ready(function() {
 
     // Context for the canvas for 2 dimensional operations
     const ctx = canvas.getContext('2d');
-       
-    // Resizes the canvas to the available size of the window.
-    function resize(){
-        ctx.canvas.width = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-    }
+    
        
     // Stores the initial position of the cursor
     let coord = {x:0 , y:0};
@@ -374,29 +382,7 @@ $(document).ready(function() {
         
         paint = false;
         event.preventDefault();
-        updateTag();
-    }
-    
-    function updateTag() {
-        var img = $("#image");
-        var cv = $("#canvas");
-        var ct = $("#container");
-        var trans = $("#translation");
-        
-        var rateX = Number(cv.css("width").slice(0, -2)) / canvas.width;
-        var rateY = Number(cv.css("height").slice(0, -2)) / canvas.height;
-        
-        
-        
-        if (!Number.isNaN(startX)) {
-            $("#tag").css("visibility", "visible");
-            $("#tag").css("top", (startY * rateY));
-            $("#tag").css("left", (startX * rateX));
-            $("#tag").css("width", (stopX - startX) * rateX);
-            $("#tag").css("height", (stopY - startY) * rateY);
-        } else {
-            $("#tag").css("visibility", "hidden");
-        }
+        redraw();
     }
        
     function sketch(event){
@@ -440,7 +426,7 @@ $(document).ready(function() {
     
     
     
-    resize(); // Resizes the canvas once the window loads
+    
     canvas.addEventListener('mousedown', startPainting, { passive: false });
     canvas.addEventListener('mouseup', stopPainting, { passive: false });
     canvas.addEventListener('mouseout', stopPainting, { passive: false });
@@ -452,60 +438,37 @@ $(document).ready(function() {
     canvas.addEventListener('touchmove', sketch, { passive: false });
     
     
-    var gestureStartCValue;
+    var gestureStartZoom;
     var gestureStartFingerPosX;
     var gestureStartFingerPosY;
     var gestureStartXValue;
     var gestureStartYValue;
     window.document.addEventListener("gesturestart", function(event) {
-        gestureStartCValue = cValue;
+        event.stopPropagation();
+        event.preventDefault();
+        
+        gestureStartZoom = zoom;
         gestureStartFingerPosX = event.clientX;
         gestureStartFingerPosY = event.clientY;
         gestureStartXValue = translationX;
         gestureStartYValue = translationY;
-        
-        event.stopPropagation();
-        event.preventDefault();
     }, false);
     
     window.document.addEventListener("gesturechange", function(event) {
-        var deltaX = event.clientX - gestureStartFingerPosX;
-        var deltaY = event.clientY - gestureStartFingerPosY;
-        
-        
         event.stopPropagation();
         event.preventDefault();
         
-        
-        
-        
-        
         // Zoom
-        cValue = gestureStartCValue * event.scale;
-        var img = $("#image");
-        if (widthIsClipped) {
-            img.css("width", cValue + "%");
-        } else {
-            img.css("height", cValue + "%");
-        }
-        
-        var cv = $("#canvas");
-        cv.css("width", img.width());
-        cv.css("height", img.height());
-        
-        var tagc = $("#tagcontainer");
-        tagc.css("width", img.width());
-        tagc.css("height", img.height());
-        updateTag();
-        
-        
-        
+        zoom = gestureStartZoom * event.scale;
         
         // Translate
-        var trans = $("#translation");
+        var deltaX = event.clientX - gestureStartFingerPosX;
+        var deltaY = event.clientY - gestureStartFingerPosY;
         translationX = gestureStartXValue + deltaX;
         translationY = gestureStartYValue + deltaY;
-        trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
+        
+        // Redraw
+        redraw();
         
         
         
@@ -513,27 +476,7 @@ $(document).ready(function() {
     }, false);
     
     window.document.addEventListener("gestureend", function(event) {
-        console.log(event);
         event.stopPropagation();
         event.preventDefault();
     }, false);
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
 });
-

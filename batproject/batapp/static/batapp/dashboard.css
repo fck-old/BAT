@@ -183,6 +183,11 @@ body {
 
 
 
+#todo-buttons {
+  position: fixed;
+  top: 0;
+  z-index: 10000;
+}
 
 /* CANVAS */
 #container {
