@@ -14,7 +14,7 @@ services:
     #service 2 web - Django
     web:
         build: .
-        command: bash -c "python batproject/manage.py makemigrations && python batproject/manage.py migrate && python batproject/manage.py runserver 0.0.0.0:8000"
+        command: bash -c "gunicorn -b 0.0.0.0:8000 --chdir batproject/ batproject.wsgi && python batproject/manage.py migrate"
         volumes:
             - .:/code
         ports:
