@@ -222,7 +222,7 @@ body {
 
 #tag {
     position: absolute;
-    border: 10px solid yellow;
+    border: 2px solid yellow;
     top: 0;
     visibility: hidden;
 }

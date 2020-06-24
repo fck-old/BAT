@@ -226,10 +226,10 @@ $(document).ready(function() {
 
     
        
-    const canvas = document.querySelector('#canvas');
+    
 
     // Context for the canvas for 2 dimensional operations
-    const ctx = canvas.getContext('2d');
+    const ctx = $canvas[0].getContext('2d');
     
        
     // Stores the initial position of the cursor
@@ -249,6 +249,10 @@ $(document).ready(function() {
     var startY = NaN;
     var stopX = NaN;
     var stopY = NaN;
+    var backupStartX = NaN;
+    var backupStartY = NaN;
+    var backupStopX = NaN;
+    var backupStopY = NaN;
 
 
 
@@ -262,18 +266,18 @@ $(document).ready(function() {
         var ct = $("#container");
         var trans = $("#translation");
         
-        var rateX = Number(cv.css("width").slice(0, -2)) / canvas.width;
-        var rateY = Number(cv.css("height").slice(0, -2)) / canvas.height;
+        var rateX = Number(cv.css("width").slice(0, -2)) / $canvas[0].width;
+        var rateY = Number(cv.css("height").slice(0, -2)) / $canvas[0].height;
         
         if (event.touches == null) {
             
-            coord.x = (event.x - canvas.getBoundingClientRect().left) / rateX;
-            coord.y = (event.y - canvas.getBoundingClientRect().top) / rateY;
+            coord.x = (event.x - $canvas[0].getBoundingClientRect().left) / rateX;
+            coord.y = (event.y - $canvas[0].getBoundingClientRect().top) / rateY;
             
         } else {
             
-            coord.x = (event.touches[0].clientX - canvas.getBoundingClientRect().left) / rateX;
-            coord.y = (event.touches[0].clientY - canvas.getBoundingClientRect().top) / rateY;
+            coord.x = (event.touches[0].clientX - $canvas[0].getBoundingClientRect().left) / rateX;
+            coord.y = (event.touches[0].clientY - $canvas[0].getBoundingClientRect().top) / rateY;
             
             
         }
@@ -305,29 +309,47 @@ $(document).ready(function() {
     // The following functions toggle the flag to start
     // and stop drawing
     function startPainting(event){
-        if (event.touches != null && event.touches.length > 1) {
-            event.preventDefault();
-            return;
-        }
+        backupStartX = startX;
+        backupStartY = startY;
+        backupStopX = stopX;
+        backupStopY = stopY;
+        startX = NaN;
+        startY = NaN;
+        stopX = NaN;
+        stopY = NaN;
         
-        
+        event.preventDefault();
         
         paint = true;
         getPosition(event);
         window.tmp = event;
-        event.preventDefault();
     }
 
-    function stopPainting(){
+    function stopPainting(event){
+        event.preventDefault();
         
         paint = false;
-        event.preventDefault();
+        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
+        redraw();
+    }
+    
+    function cancelPainting(){
+        console.log("cancelling");
+        
+        paint = false;
+        ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
+        
+        // restore backup
+        startX = backupStartX;
+        startY = backupStartY;
+        stopX = backupStopX;
+        stopY = backupStopY;
+        
         redraw();
     }
        
     function sketch(event){
-        
-        
+        event.preventDefault();
         
         if (!paint) return;
         
@@ -357,8 +379,6 @@ $(document).ready(function() {
         
         // Draws the line.
         ctx.stroke();
-        
-        event.preventDefault();
     }
 
     
@@ -367,15 +387,15 @@ $(document).ready(function() {
     
     
     
-    canvas.addEventListener('mousedown', startPainting, { passive: false });
-    canvas.addEventListener('mouseup', stopPainting, { passive: false });
-    canvas.addEventListener('mouseout', stopPainting, { passive: false });
-    canvas.addEventListener('mousemove', sketch, { passive: false });
+    $canvas[0].addEventListener('mousedown', startPainting, { passive: false });
+    $canvas[0].addEventListener('mouseup', stopPainting, { passive: false });
+    $canvas[0].addEventListener('mouseout', stopPainting, { passive: false });
+    $canvas[0].addEventListener('mousemove', sketch, { passive: false });
     
     
-    canvas.addEventListener('touchstart', startPainting, { passive: false });
-    canvas.addEventListener('touchend', stopPainting, { passive: false });
-    canvas.addEventListener('touchmove', sketch, { passive: false });
+    $canvas[0].addEventListener('touchstart', startPainting, { passive: false });
+    $canvas[0].addEventListener('touchend', stopPainting, { passive: false });
+    $canvas[0].addEventListener('touchmove', sketch, { passive: false });
     
     
     var gestureStartZoom;
@@ -384,8 +404,11 @@ $(document).ready(function() {
     var gestureStartXValue;
     var gestureStartYValue;
     window.document.addEventListener("gesturestart", function(event) {
-        event.stopPropagation();
         event.preventDefault();
+        
+        if (paint) {
+            cancelPainting();
+        }
         
         gestureStartZoom = zoom;
         gestureStartFingerPosX = event.clientX;
@@ -395,8 +418,11 @@ $(document).ready(function() {
     }, false);
     
     window.document.addEventListener("gesturechange", function(event) {
-        event.stopPropagation();
         event.preventDefault();
+        
+        if (paint) {
+            cancelPainting();
+        }
         
         // Zoom
         zoom = gestureStartZoom * event.scale;
@@ -416,7 +442,10 @@ $(document).ready(function() {
     }, false);
     
     window.document.addEventListener("gestureend", function(event) {
-        event.stopPropagation();
         event.preventDefault();
+        
+        if (paint) {
+            cancelPainting();
+        }
     }, false);
 });
