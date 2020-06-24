@@ -274,6 +274,13 @@ $(document).ready(function() {
         if (drawing) {
             cancelDrawing();
         }
+        
+        if (zoom < 100) {
+            zoom = 100;
+            translationX = 0;
+            translationY = 0;
+            redraw();
+        }
     });
     
     
