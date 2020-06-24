@@ -6,13 +6,51 @@ $(document).ready(function() {
     var translationY = 0; // in pixel
     var cFactor = 1; // canvas displayed size in relation to real size
     
+    // Coordinates of tag
+    var coords = {
+        start: {
+            x: NaN,
+            y: NaN
+        },
+        stop: {
+            x: NaN,
+            y: NaN
+        }
+    };
+    
+    function resetCoords() {
+        coords.start.x = NaN;
+        coords.start.y = NaN;
+        coords.stop.x = NaN;
+        coords.stop.y = NaN;
+    }
+    
+    function addCoord(coord) {
+        if (Number.isNaN(coords.start.x) || coord.x < coords.start.x) {
+            coords.start.x = coord.x;
+        }  
+        
+        if (Number.isNaN(coords.start.y) || coord.y < coords.start.y) {
+            coords.start.y = coord.y;
+        }
+        
+        if (Number.isNaN(coords.stop.x) || coord.x > coords.stop.x) {
+            coords.stop.x = coord.x;
+        }
+        
+        if (Number.isNaN(coords.stop.y) || coord.y > coords.stop.y) {
+            coords.stop.y = coord.y;
+        }
+    }
+    
     // DOM elements
     var $image = $("#image");
     var $trans = $("#translation");
-    var $canvas = $("#canvas");
     var $tagcontainer = $("#tagcontainer");
     var $tag = $("#tag");
     var $container = $("#container");
+    var $canvas = $("#canvas");
+    var ctx = $canvas[0].getContext('2d');
     
     // Redraw function
     function redraw() {
@@ -39,12 +77,13 @@ $(document).ready(function() {
         
         cFactor = width / canvas.width;
         
-        if (!Number.isNaN(startX)) {
+        if (!Number.isNaN(coords.start.x) && !Number.isNaN(coords.start.y) &&
+            !Number.isNaN(coords.stop.x) && !Number.isNaN(coords.stop.y)) {
             $tag.css("visibility", "visible");
-            $tag.css("top", (startY * cFactor));
-            $tag.css("left", (startX * cFactor));
-            $tag.css("width", (stopX - startX) * cFactor);
-            $tag.css("height", (stopY - startY) * cFactor);
+            $tag.css("top", (coords.start.y * cFactor));
+            $tag.css("left", (coords.start.x * cFactor));
+            $tag.css("width", (coords.stop.x - coords.start.x) * cFactor);
+            $tag.css("height", (coords.stop.y - coords.start.y) * cFactor);
         } else {
             $tag.css("visibility", "hidden");
         }
@@ -57,21 +96,22 @@ $(document).ready(function() {
     
     // Load new image
     function loadImage(url) {
-        $container.addClass("empty");
-        $image.attr("src", url);
-    }
-    
-    // Complete loading of new image
-    $image.bind("load", function() {
         zoom = 100;
         translationX = 0;
         translationY = 0;
         
-        startX = NaN;
-        startY = NaN;
-        stopX = NaN;
-        stopY = NaN;
+        resetCoords();
         
+        redraw();
+        
+        if ($image.attr("src") != url) {
+            $container.addClass("empty");
+            $image.attr("src", url);
+        }
+    }
+    
+    // Complete loading of new image
+    $image.bind("load", function() {
         $canvas[0].width = $image[0].naturalWidth;
         $canvas[0].height = $image[0].naturalHeight;
         
@@ -217,21 +257,6 @@ $(document).ready(function() {
     
     
     
-    
-    
-    // wait for the content of the window element
-    // to load, then performs the operations.
-    // This is considered best practice.
-
-
-    
-       
-    
-
-    // Context for the canvas for 2 dimensional operations
-    const ctx = $canvas[0].getContext('2d');
-    
-       
     // Stores the initial position of the cursor
     let coord = {x:0 , y:0};
 
@@ -261,32 +286,8 @@ $(document).ready(function() {
     // an event e is triggered to the coordinates where
     // the said event is triggered.
     function getPosition(event){
-        var img = $("#image");
-        var cv = $("#canvas");
-        var ct = $("#container");
-        var trans = $("#translation");
-        
-        var rateX = Number(cv.css("width").slice(0, -2)) / $canvas[0].width;
-        var rateY = Number(cv.css("height").slice(0, -2)) / $canvas[0].height;
-        
-        if (event.touches == null) {
-            
-            coord.x = (event.x - $canvas[0].getBoundingClientRect().left) / rateX;
-            coord.y = (event.y - $canvas[0].getBoundingClientRect().top) / rateY;
-            
-        } else {
-            
-            coord.x = (event.touches[0].clientX - $canvas[0].getBoundingClientRect().left) / rateX;
-            coord.y = (event.touches[0].clientY - $canvas[0].getBoundingClientRect().top) / rateY;
-            
-            
-        }
-        
-        
-        
-        
-        
-        
+        coord.x = (event.touches[0].clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
+        coord.y = (event.touches[0].clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
         
         
         if (Number.isNaN(startX) || coord.x < startX) {
@@ -387,10 +388,7 @@ $(document).ready(function() {
     
     
     
-    $canvas[0].addEventListener('mousedown', startPainting, { passive: false });
-    $canvas[0].addEventListener('mouseup', stopPainting, { passive: false });
-    $canvas[0].addEventListener('mouseout', stopPainting, { passive: false });
-    $canvas[0].addEventListener('mousemove', sketch, { passive: false });
+    
     
     
     $canvas[0].addEventListener('touchstart', startPainting, { passive: false });
@@ -448,4 +446,88 @@ $(document).ready(function() {
             cancelPainting();
         }
     }, false);
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    $("#b1").click();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+     *  Mouse Support
+     */
+    $canvas.on("mousedown", startRecting);
+    $canvas.on("mouseup", stopRecting);
+    $canvas.on("mouseout", rect);
+    $canvas.on("mousemove", rect);
+    
+    var recting = false;
+    var startCoord;
+    
+    function startRecting(event) {
+        event.preventDefault();
+        
+        startCoord = getRectCoord(event);
+        
+        resetCoords();
+        addCoord(startCoord);
+        
+        recting = true;
+        redraw();
+    }
+    
+    function stopRecting(event) {
+        event.preventDefault();
+        
+        if (!recting) {
+            return;
+        }
+        
+        resetCoords();
+        addCoord(startCoord);
+        addCoord(getRectCoord(event));
+        
+        recting = false;
+        redraw();
+    }
+    
+    function rect(event) {
+        event.preventDefault();
+        
+        if (!recting) {
+            return;
+        }
+        
+        resetCoords();
+        addCoord(startCoord);
+        addCoord(getRectCoord(event));
+        
+        redraw();
+    }
+    
+    function getRectCoord(event) {
+        var x = (event.clientX - $canvas[0].getBoundingClientRect().left) / cFactor;
+        var y = (event.clientY - $canvas[0].getBoundingClientRect().top) / cFactor;
+        
+        if (x < 0) x = 0;
+        if (y < 0) y = 0;
+        if (x > $image.width()) x = $image.width();
+        if (y > $image.height()) y = $image.height();
+        
+        return {x: x, y: y};
+    }
 });
