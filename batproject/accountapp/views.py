@@ -24,6 +24,8 @@ def signup(request):
             auth_login(request, form_bat_user)
             context = {'username': request.user.username, 'email': request.user.email}
             return render(request, 'user.html', context)
+        else:
+            print("form is not valid")
     else:
         form = SignUpForm()
         print("gib html aus")
