@@ -22,16 +22,10 @@
       <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-      <ul class="navbar-nav px-3">
-        <li class="nav-item text-nowrap">
-          <a class="nav-link" href="#">Log out</a>
-        </li>
-      </ul>
     </nav>
 
-    <div class="container-fluid h-100-m-48">
-      <div class="row h-100">
+    <div id="main-container" class="container-fluid h-100-m-48">
+      <div id="main-row" class="row h-100">
         <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
           <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column">
@@ -91,7 +85,8 @@
         </nav>
 
         <main id="main" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
-          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          
+          <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
             <h1 class="h2">Tag: <span class="totag">Crosswalk</span></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
@@ -101,11 +96,33 @@
           </div>
           
           
-          <div id="image-container">
-            <img id="theimage" src="https://frank.kohlhepp.me/tmp/image.jpg" alt="">
-            <span class="tag"></span>
+          
+          
+          <!-- CANVAS -->
+          <div class="d-none">
+            <button id="b1" class="btn btn-dark">Bild 1</button>
+            <button id="b2" class="btn btn-dark">Bild 2</button>
+            
+            <button id="plus" class="btn btn-dark">+</button>
+            <button id="minus" class="btn btn-dark">-</button>
+            <button id="reset" class="btn btn-dark">Reset</button>
+            
+            <button id="up" class="btn btn-dark">Up</button>
+            <button id="left" class="btn btn-dark">Left</button>
+            <button id="down" class="btn btn-dark">Down</button>
+            <button id="right" class="btn btn-dark">Right</button>
           </div>
           
+          <div id="container">
+            <div id="translation">
+              <img id="image" src="" alt="">
+              <div id="tagcontainer">
+                <div id="tag"></div>
+              </div>
+              <canvas id="canvas"></canvas>
+            </div>
+          </div>
+          <!-- END: CANVAS -->
           
           
           
