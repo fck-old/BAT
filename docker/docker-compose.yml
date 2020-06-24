@@ -9,12 +9,12 @@ services:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
+        # ports:
+        #     - "5432:5432"
     #service 2 web - Django
     web:
         build: .
-        command: >
-            sh -c "python batproject/manage.py migrate &&
-                python batproject/manage.py runserver 0.0.0.0:8000" 
+        command: bash -c "python batproject/manage.py makemigrations && python batproject/manage.py migrate && python batproject/manage.py runserver 0.0.0.0:8000"
         volumes:
             - .:/code
         ports:

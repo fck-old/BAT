@@ -2,10 +2,10 @@
 echo "getting everything setup..."
 
 #copy deployment files to correct location
-cp docker/Dockerfile docker/docker-compose.yml docker/requirements.txt .
+cp docker/Dockerfile docker/docker-compose.yml .
 
 #copy settings.py to project settings
-cp docker/settings.py batproject/batproject/settings.py
+#cp docker/settings.py batproject/batproject/settings.py
 
 echo "starting docker"
 
