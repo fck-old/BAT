@@ -12,14 +12,9 @@ $(document).ready(function() {
     var $canvas = $("#canvas");
     var $tagcontainer = $("#tagcontainer");
     var $tag = $("#tag");
+    var $container = $("#container");
     
-    
-    
-    
-    
-    
-    
-    
+    // Redraw function
     function redraw() {
         // Translate
         $trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
@@ -27,8 +22,10 @@ $(document).ready(function() {
         // Zoom
         if (isPortrait) {
             $image.css("width", zoom + "%");
+            $image.css("height", "auto");
         } else {
             $image.css("height", zoom + "%");
+            $image.css("width", "auto");
         }
         
         var width = $image.width();
@@ -53,111 +50,64 @@ $(document).ready(function() {
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    setTimeout(function() {$("#b2").click();}, 500);
+    // Trigger redrawing when window size is changed
     window.addEventListener("resize", function() {
         redraw();
     });
     
+    // Load new image
+    function loadImage(url) {
+        $container.addClass("empty");
+        $image.attr("src", url);
+    }
     
-    
-    $("#image").bind("load", function() {
+    // Complete loading of new image
+    $image.bind("load", function() {
+        zoom = 100;
+        translationX = 0;
+        translationY = 0;
+        
         startX = NaN;
         startY = NaN;
         stopX = NaN;
         stopY = NaN;
-        redraw();
         
+        $canvas[0].width = $image[0].naturalWidth;
+        $canvas[0].height = $image[0].naturalHeight;
         
-        var img = $("#image");
-        var cv = $("#canvas");
-        var tagc = $("#tagcontainer");
-        var ct = $("#container");
-        var trans = $("#translation");
-        
-        cv[0].height = img[0].naturalHeight;
-        cv[0].width = img[0].naturalWidth;
-        
-        if (img.width() > img.height()) {
-            img.css("width", "100%");
-            img.css("height", "auto");
-            cv.css("width", ct.width());
-            cv.css("height", img.height());
-            tagc.css("width", ct.width());
-            tagc.css("height", img.height());
+        if ($image[0].naturalWidth > $image[0].naturalHeight) {
             isPortrait = true;
-            zoom = 100;
-            translationX = 0;
-            translationY = 0;
-            trans.css("transform", "translate(0, 0)");
         } else {
-            img.css("height", "100%");
-            img.css("width", "auto");
-            cv.css("height", ct.height());
-            cv.css("width", img.width());
-            tagc.css("height", ct.height());
-            tagc.css("width", img.width());
             isPortrait = false;
-            zoom = 100;
-            translationX = 0;
-            translationY = 0;
-            trans.css("transform", "translate(0, 0)");
         }
+        
+        redraw();
+        $container.removeClass("empty");
     });
     
     
+    
+    
+    
+    
+    
+    
+    // Enable picture buttons
     $("#b1").click(function() {
-        $("#image").attr("src", "https://frank.kohlhepp.me/tmp/querformat.jpg");
+        loadImage("https://frank.kohlhepp.me/tmp/querformat.jpg");
     });
     
     $("#b2").click(function() {
-        $("#image").attr("src", "https://frank.kohlhepp.me/tmp/hochformat.jpg");
+        loadImage("https://frank.kohlhepp.me/tmp/hochformat.jpg");
     });
     
-    
+    // Enable keyboard shortcuts and control buttons
     function plus() {
-        // Zoom in
         zoom += 10;
         redraw();
     }
     
     function minus() {
-        // Zoom out
         zoom -= 10;
         redraw();
     }
@@ -168,7 +118,6 @@ $(document).ready(function() {
         translationY = 0;
         redraw();
     }
-    
     
     function up() {
         translationY += 10;
@@ -190,12 +139,7 @@ $(document).ready(function() {
         redraw();
     }
     
-    
-    
     $(document).keypress(function(event) {
-        
-        
-        
         if (event.code == "Period") {
             plus();
         }
@@ -223,11 +167,7 @@ $(document).ready(function() {
         if (event.code == "KeyD") {
             right();
         }
-        
-        
     });
-    
-    
     
     $("#plus").click(plus);
     $("#minus").click(minus);
