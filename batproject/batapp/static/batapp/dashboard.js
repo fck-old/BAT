@@ -248,8 +248,65 @@ $(document).ready(function() {
     
     
     
+    /*
+     * Touch Support
+     */
+    $canvas.on("touchstart", startDrawing);
+    $canvas.on("touchend", stopDrawing);
+    $canvas.on("touchmove", draw);
+    $canvas.on("touchcancel", cancelDrawing);
     
     
+    var gestureStartZoom;
+    var gestureStartFingerPosX;
+    var gestureStartFingerPosY;
+    var gestureStartXValue;
+    var gestureStartYValue;
+    window.document.addEventListener("gesturestart", function(event) {
+        event.preventDefault();
+        
+        if (paint) {
+            cancelDrawing();
+        }
+        
+        gestureStartZoom = zoom;
+        gestureStartFingerPosX = event.clientX;
+        gestureStartFingerPosY = event.clientY;
+        gestureStartXValue = translationX;
+        gestureStartYValue = translationY;
+    }, false);
+    
+    window.document.addEventListener("gesturechange", function(event) {
+        event.preventDefault();
+        
+        if (paint) {
+            cancelDrawing();
+        }
+        
+        // Zoom
+        zoom = gestureStartZoom * event.scale;
+        
+        // Translate
+        var deltaX = event.clientX - gestureStartFingerPosX;
+        var deltaY = event.clientY - gestureStartFingerPosY;
+        translationX = gestureStartXValue + deltaX;
+        translationY = gestureStartYValue + deltaY;
+        
+        // Redraw
+        redraw();
+        
+        
+        
+        
+    }, false);
+    
+    window.document.addEventListener("gestureend", function(event) {
+        event.preventDefault();
+        
+        if (paint) {
+            cancelDrawing();
+        }
+    }, false);
     
     
     
@@ -309,7 +366,7 @@ $(document).ready(function() {
 
     // The following functions toggle the flag to start
     // and stop drawing
-    function startPainting(event){
+    function startDrawing(event){
         backupStartX = startX;
         backupStartY = startY;
         backupStopX = stopX;
@@ -326,7 +383,7 @@ $(document).ready(function() {
         window.tmp = event;
     }
 
-    function stopPainting(event){
+    function stopDrawing(event){
         event.preventDefault();
         
         paint = false;
@@ -334,7 +391,7 @@ $(document).ready(function() {
         redraw();
     }
     
-    function cancelPainting(){
+    function cancelDrawing(){
         console.log("cancelling");
         
         paint = false;
@@ -349,7 +406,7 @@ $(document).ready(function() {
         redraw();
     }
        
-    function sketch(event){
+    function draw(event){
         event.preventDefault();
         
         if (!paint) return;
@@ -391,61 +448,7 @@ $(document).ready(function() {
     
     
     
-    $canvas[0].addEventListener('touchstart', startPainting, { passive: false });
-    $canvas[0].addEventListener('touchend', stopPainting, { passive: false });
-    $canvas[0].addEventListener('touchmove', sketch, { passive: false });
-    
-    
-    var gestureStartZoom;
-    var gestureStartFingerPosX;
-    var gestureStartFingerPosY;
-    var gestureStartXValue;
-    var gestureStartYValue;
-    window.document.addEventListener("gesturestart", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelPainting();
-        }
-        
-        gestureStartZoom = zoom;
-        gestureStartFingerPosX = event.clientX;
-        gestureStartFingerPosY = event.clientY;
-        gestureStartXValue = translationX;
-        gestureStartYValue = translationY;
-    }, false);
-    
-    window.document.addEventListener("gesturechange", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelPainting();
-        }
-        
-        // Zoom
-        zoom = gestureStartZoom * event.scale;
-        
-        // Translate
-        var deltaX = event.clientX - gestureStartFingerPosX;
-        var deltaY = event.clientY - gestureStartFingerPosY;
-        translationX = gestureStartXValue + deltaX;
-        translationY = gestureStartYValue + deltaY;
-        
-        // Redraw
-        redraw();
-        
-        
-        
-        
-    }, false);
-    
-    window.document.addEventListener("gestureend", function(event) {
-        event.preventDefault();
-        
-        if (paint) {
-            cancelPainting();
-        }
-    }, false);
+
     
     
     
