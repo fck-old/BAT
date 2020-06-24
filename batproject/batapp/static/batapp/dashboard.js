@@ -43,6 +43,11 @@ $(document).ready(function() {
         }
     }
     
+    var backupStartX;
+    var backupStartY;
+    var backupStopX;
+    var backupStopY;
+    
     // DOM elements
     var $image = $("#image");
     var $trans = $("#translation");
@@ -138,12 +143,8 @@ $(document).ready(function() {
     $canvas.on("touchcancel", cancelDrawing);
     
     var drawing = false;
+    var hasDrawn = false;
     var lastCoord = {x: 0, y: 0};
-    
-    var backupStartX;
-    var backupStartY;
-    var backupStopX;
-    var backupStopY;
     
     function startDrawing(event) {
         event.preventDefault();
@@ -156,12 +157,18 @@ $(document).ready(function() {
         resetCoords();
         processDrawCoord(event);
         drawing = true;
+        hasDrawn = false;
     }
     
     function stopDrawing(event) {
         event.preventDefault();
         
         if (!drawing) {
+            return;
+        }
+        
+        if (!hasDrawn) {
+            cancelDrawing();
             return;
         }
         
@@ -185,6 +192,7 @@ $(document).ready(function() {
         processDrawCoord(event);
         ctx.lineTo(lastCoord.x , lastCoord.y);
         ctx.stroke();
+        hasDrawn = true;
     }
     
     function cancelDrawing(event) {
@@ -277,14 +285,19 @@ $(document).ready(function() {
      */
     $canvas.on("mousedown", startRecting);
     $(document).on("mouseup", stopRecting);
-    $(document).on("mouseout", rect);
     $(document).on("mousemove", rect);
     
     var recting = false;
+    var hasRected = false;
     var startCoord;
     
     function startRecting(event) {
         event.preventDefault();
+        
+        backupStartX = coords.start.x;
+        backupStartY = coords.start.y;
+        backupStopX = coords.stop.x;
+        backupStopY = coords.stop.y;
         
         startCoord = getRectCoord(event);
         
@@ -292,13 +305,18 @@ $(document).ready(function() {
         addCoord(startCoord);
         
         recting = true;
-        redraw();
+        hasRected = false;
     }
     
     function stopRecting(event) {
         event.preventDefault();
         
         if (!recting) {
+            return;
+        }
+        
+        if (!hasRected) {
+            cancelRecting();
             return;
         }
         
@@ -320,6 +338,21 @@ $(document).ready(function() {
         resetCoords();
         addCoord(startCoord);
         addCoord(getRectCoord(event));
+        
+        redraw();
+        hasRected = true;
+    }
+    
+    function cancelRecting() {
+        if (!recting) {
+            return;
+        }
+        
+        recting = false;
+        coords.start.x = backupStartX;
+        coords.start.y = backupStartY;
+        coords.stop.x = backupStopX;
+        coords.stop.y = backupStopY;
         
         redraw();
     }
