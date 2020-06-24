@@ -78,13 +78,20 @@ WSGI_APPLICATION = 'batproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'bat',
+        'USER': 'sksys-bat-instance',
+        'PASSWORD': 'yhEcmCOO012HuG64',
+#        'HOST': 'sksys-bat:europe-west3:sksys-bat-instance',
         'PORT': '5432',
     }
 }
+
+DATABASES['default']['HOST'] = '/cloudsql/sksys-bat:europe-west3:sksys-bat-instance'
+#if os.getenv('GAE_INSTANCE'):
+#    pass
+#else:
+#    DATABASES['default']['HOST'] = '127.0.0.1'
+
 
 
 # Password validation
@@ -123,12 +130,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'https://storage.googleapis.com/sksys-bat/static/'
+
 
 LOGOUT_REDIRECT_URL = 'functions'
 LOGIN_REDIRECT_URL = 'functions'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = 'https://storage.googleapis.com/sksys-bat/media/'
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accountapp.User'
