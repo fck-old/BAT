@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -7,7 +9,7 @@ from django.template import loader
 from django.utils import timezone
 
 from batapp.forms import PictureForm
-from .models import Picture, StatusPicture, Muell
+from .models import Picture, StatusPicture, Muell, Coord, CoordHead
 
 
 def index(request):
@@ -36,6 +38,9 @@ def upload_image(request):
             #for i in a:
                 #i.delete()
             picture.status = StatusPicture.objects.get(status_type='untagged')
+            picture.uploaded_by = request.user
+            c = CoordHead.objects.create()
+            picture.rect = c
             print(picture.upload_date)
             picture.save()
             #header_ut = StatusPicture.objects.get(status_type='untagged')
@@ -60,6 +65,24 @@ def get_all_images(request):
         # p.picture_path_file = 'http://127.0.0.1:8000/batapp' + p.picture_path_file.url # hier geaendert
         # print('Das wird zusammengefuegt:')
         # print('http://127.0.0.1:8000/batapp' + ([str)p.picture_path_file)  # hier geaendert
+    return render(request, 'getimages.html', {'pictures': pictures})
+
+
+@login_required()
+def get_images_uploaded_by_user(request):
+
+    pictures = Picture.objects.filter(uploaded_by=request.user)
+
+    return render(request, 'getimages.html', {'pictures': pictures})
+
+
+@login_required()
+def get_images_tagged_by_user(request):
+
+    pictures = Picture.objects.filter(tagged_by=request.user)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+
     return render(request, 'getimages.html', {'pictures': pictures})
 
 
@@ -124,3 +147,17 @@ def get_untagged_picture(request):
         #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
         #untagged_p.save()
         return HttpResponse('{"url": "", "label": "", "image": false}')
+
+@login_required()
+def save_rectangle(request):
+    data = request.POST
+    #data = json.loads(data_un)
+    Coord.objects.create(x=data['x'], y=data['y'], width=data['width'], height=data['height'], belongs_to_pic=request.user.last_picture.rect)
+    in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+    tagged_p = StatusPicture.objects.get(status_type='tagged')
+    pic = in_progress_p.pictures.filter(id=request.user.last_picture)
+    pic.status = tagged_p
+    pic.tagged_by = request.user
+    request.user.last_picture = -1
+    #data['id']
+    return HttpResponse('Saving successful')

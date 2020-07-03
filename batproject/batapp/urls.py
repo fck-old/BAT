@@ -10,6 +10,8 @@ urlpatterns = [
     path('upload/', views.upload_image, name='upload'),
     path('getimages/', views.get_all_images, name='getimages'),
     path('init/', views.initialise_status_types, name='init'),
-    path('untagged/', views.get_untagged_picture, name='get_untagged')
+    path('untagged/', views.get_untagged_picture, name='get_untagged'),
+    path('getuserimages/', views.get_images_uploaded_by_user, name='getuserimages'),
+    path('getusertaggedimages/', views.get_images_tagged_by_user, name='getusertaggedimages'),
 ]
 
