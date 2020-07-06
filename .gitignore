@@ -256,3 +256,5 @@ dist
 ##########################
 .vscode/
 .pylintrc
+
+docker/*.json
