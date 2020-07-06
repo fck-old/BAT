@@ -86,7 +86,7 @@ DATABASES = {
     }
 }
 
-DATABASES['default']['HOST'] = '/cloudsql/sksys-bat:europe-west3:sksys-bat-instance'
+#DATABASES['default']['HOST'] = '/cloudsql/sksys-bat:europe-west3:sksys-bat-instance'
 #if os.getenv('GAE_INSTANCE'):
 #    pass
 #else:
@@ -133,15 +133,15 @@ USE_TZ = True
 ### switch between static/media url for testing 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-#STATIC_URL = 'static/'
-STATIC_URL = 'https://storage.googleapis.com/sksys-bat/static/'
+STATIC_URL = 'static/'
+#STATIC_URL = 'https://storage.googleapis.com/sksys-bat/static/'
 
 LOGOUT_REDIRECT_URL = 'functions'
 LOGIN_REDIRECT_URL = 'functions'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#MEDIA_URL = 'media/'
-MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
+MEDIA_URL = 'media/'
+#MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
 
 AUTH_USER_MODEL = 'accountapp.User'
 
