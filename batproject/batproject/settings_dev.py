@@ -78,17 +78,10 @@ WSGI_APPLICATION = 'batproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-<<<<<<< HEAD:batproject/batproject/settings_dev.py
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'postgres',
         'HOST': 'db',
-=======
-        'NAME': 'bat',
-        'USER': 'sksys-bat-instance',
-        'PASSWORD': 'yhEcmCOO012HuG64',
-#        'HOST': 'sksys-bat:europe-west3:sksys-bat-instance',
->>>>>>> 61f1f1395b23b1d8e9b98aab2d07c08cbe1cd30e:docker/settings.py
         'PORT': '5432',
     }
 }
