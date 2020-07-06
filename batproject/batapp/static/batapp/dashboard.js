@@ -57,6 +57,19 @@ $(document).ready(function() {
     var $canvas = $("#canvas");
     var ctx = $canvas[0].getContext('2d');
     
+    // Functions to help keep element in middle point when zooming
+    function calcMiddleTranslation() {
+        var x = translationX / cFactor;
+        var y = translationY / cFactor;
+        return {x, y};
+    }
+    
+    function setMiddleTranslation(transObj) {
+        translationX = transObj.x * cFactor;
+        translationY = transObj.y * cFactor;
+        redraw();
+    }
+    
     // Redraw function
     function redraw() {
         // Translate
@@ -236,8 +249,7 @@ $(document).ready(function() {
     var gestureStartZoom;
     var gestureStartFingerPosX;
     var gestureStartFingerPosY;
-    var gestureStartXValue;
-    var gestureStartYValue;
+    var gestureStartTransObj;
     
     $(document).on("gesturestart", function(event) {
         event.preventDefault();
@@ -249,8 +261,7 @@ $(document).ready(function() {
         gestureStartZoom = zoom;
         gestureStartFingerPosX = event.clientX;
         gestureStartFingerPosY = event.clientY;
-        gestureStartXValue = translationX;
-        gestureStartYValue = translationY;
+        gestureStartTransObj = calcMiddleTranslation();
     });
     
     $(document).on("gesturechange", function(event) {
@@ -262,12 +273,17 @@ $(document).ready(function() {
         
         // Zoom
         zoom = gestureStartZoom * event.originalEvent.scale;
+        redraw(); // needed so we get new cFactor for setMiddleTranslation()
+        setMiddleTranslation(gestureStartTransObj);
+        
+        gestureStartCorrectedTranslationX = translationX;
+        gestureStartCorrectedTranslationY = translationY;
         
         // Translate
         var deltaX = event.clientX - gestureStartFingerPosX;
         var deltaY = event.clientY - gestureStartFingerPosY;
-        translationX = gestureStartXValue + deltaX;
-        translationY = gestureStartYValue + deltaY;
+        translationX = gestureStartCorrectedTranslationX + deltaX;
+        translationY = gestureStartCorrectedTranslationY + deltaY;
         
         // Redraw
         redraw();
@@ -506,19 +522,6 @@ $(document).ready(function() {
     
     
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     // TODO
     
     
@@ -533,13 +536,17 @@ $(document).ready(function() {
     
     // Enable keyboard shortcuts and control buttons
     function plus() {
+        var transObj = calcMiddleTranslation();
         zoom += 10;
-        redraw();
+        redraw()
+        setMiddleTranslation(transObj);
     }
     
     function minus() {
+        var transObj = calcMiddleTranslation();
         zoom -= 10;
-        redraw();
+        redraw()
+        setMiddleTranslation(transObj);
     }
     
     function reset() {
