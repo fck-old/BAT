@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block body %}
+  <div class="container">
+    <h2>Your user infos</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <h2>{{ user.get_full_name }}</h2>
+<ul>
+  <li>Username: {{ user.username }}</li>
+  <li>Email: {{ user.email }}</li>
+    <li>firstname: {{ user.first_name }}</li>
+  <li>lastname: {{ user.last_name }}</li>
+</ul>
+    </form>
+  </div>
+<div class="container">
+    <div>Übersicht (diese Seite): <a href= "{% url 'functions' %}"> {% url 'functions' %} </a> </div>
+    <div>Account anlegen: <a href= "{% url 'signup' %}"> {% url 'signup' %} </a> </div>
+    <div>einloggen: <a href= "{% url 'login' %}"> {% url 'login' %} </a> </div>
+    <div>ausloggen: <a href= "{% url 'logout' %}"> {% url 'logout' %} </a> </div>
+    <div>Bilder hochladen: <a href= "{% url 'upload' %}"> {% url 'upload' %} </a> </div>
+    <div>(alle) Bilder vom Server abrufen: <a href= "{% url 'getimages' %}"> {% url 'getimages' %} </a> </div>
+    <div>Passwort ändern: <a href= "{% url 'changePassword' %}"> {% url 'changePassword' %} </a> </div>
+    <div>Profil ändern: <a href= "{% url 'changeProfile' %}"> {% url 'changeProfile' %} </a> </div>
+    <div>Account löschen: <a href= "{% url 'deleteAccount' %}"> {% url 'deleteAccount' %} </a> </div>
+</div>
+{% endblock %}>
