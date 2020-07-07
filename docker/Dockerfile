@@ -15,3 +15,7 @@ RUN pip install -r requirements.txt
 
 #Copy project
 COPY . /code/
+
+# RUN python batproject/manage.py check
+# RUN python batproject/manage.py migrate
+# RUN gunicorn -b :8000 --chdir batproject/ batproject.wsgi

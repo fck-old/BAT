@@ -2,3 +2,4 @@ Django
 psycopg2
 Pillow
 Gunicorn
+django-storages[google]
