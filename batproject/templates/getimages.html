@@ -7,6 +7,14 @@
             </div>
             <div>
                 {{p.label}}
+                {% if p.status.status_type == "tagged" %}
+                    {% for l in p.rect.rectangles %}
+                        {{l.x}}
+                        {{l.y}}
+                        {{l.width}}
+                        {{l.height}}
+                    {% endfor %}
+                {% endif %}
             </div>
         {% endfor %}
     {% endblock %}

@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-    <img src="images/logo.png" alt="Logo" width="240" height="240">
+    <img src="design/logo_512.png" alt="Logo" width="240" height="240">
   </a>
 
   <h3 align="center">README</h3>

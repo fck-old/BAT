@@ -9,12 +9,19 @@ services:
             - POSTGRES_DB=postgres
             - POSTGRES_USER=postgres
             - POSTGRES_PASSWORD=postgres
+        ports:
+            - "5432:5432"
     #service 2 web - Django
     web:
+        environment: 
+            # - DJANGO_SETTINGS=prod
+            - DB_NAME_DJANGO=postgres
+            - DB_USER_DJANGO=postgres
+            - DB_PASSWORD_DJANGO=postgres
+            - CLOUD_SQL_INSTANCE_IP=db
+            - PORT=8000
         build: .
-        ccommand: >
-            sh -c "python batproject/manage.py migrate &&
-                python batproject/manage.py runserver 0.0.0.0:8000" 
+        command: gunicorn -b :8000 --chdir batproject/ batproject.wsgi
         volumes:
             - .:/code
         ports:

@@ -1,0 +1,50 @@
+version: '3'
+### variant 1    
+services:
+    #service 1 db - postgres
+    db:
+        image: postgres
+        #envioronment varibles
+        environment:
+            - POSTGRES_DB=postgres
+            - POSTGRES_USER=postgres
+            - POSTGRES_PASSWORD=postgres
+        # ports:
+        #     - "5432:5432"
+    #service 2 web - Django
+    web:
+        build: .
+        command: bash -c "gunicorn -b 0.0.0.0:8000 --chdir batproject/ batproject.wsgi && python batproject/manage.py migrate"
+        volumes:
+            - .:/code
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
+### variant 2
+# services:
+#     db:
+#         image: postgres
+#         environment:
+#         - POSTGRES_DB=postgres
+#         - POSTGRES_USER=postgres
+#         - POSTGRES_PASSWORD=postgres
+#     web:
+#         build: .
+#         command: python batproject/manage.py runserver 0.0.0.0:8000
+#         volumes:
+#         - .:/code
+#         ports:
+#         - "8000:8000"
+#         depends_on:
+#         - db
+#     migration:
+#         build: .
+#         image: app
+#         command: python manage.py migrate
+#         volumes:
+#             - .:/code
+#         links:
+#             - db
+#         depends_on:
+#             - db
