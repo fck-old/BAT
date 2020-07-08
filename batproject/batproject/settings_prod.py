@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 from google.oauth2 import service_account
+from google.auth import compute_engine
+from google.cloud import storage
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,12 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '8wysz-i5@^d_f%beglc6u0cl^b!g3+e3t357)3yxu1=a9+r$!l'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -139,21 +142,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
 GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-    "docker/media_sksys-bat-7a5cdc1a851f.json"
+     os.environ['GOOGLE_APPLICATION_CREDENTIALS']
 )
 
 DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 GS_BUCKET_NAME = 'bat-media'
 GS_PROJECT_ID = 'sksys-bat'
-
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'bat',
-#         'USER': 'sksys-bat-instance',
-#         'PASSWORD': 'DB_PASSWORD',
-#         'HOST': 'sksys-bat:europe-west3:sksys-bat-instance',
-#         'PORT': '5432',
-#     }
-# }

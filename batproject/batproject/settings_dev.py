@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8wysz-i5@^d_f%beglc6u0cl^b!g3+e3t357)3yxu1=a9+r$!l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
 
@@ -142,18 +142,18 @@ LOGOUT_REDIRECT_URL = 'functions'
 LOGIN_REDIRECT_URL = 'functions'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-#MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
+#MEDIA_URL = '/media/'
+MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
 
 AUTH_USER_MODEL = 'accountapp.User'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 
-# GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#     "/home/james/Documents/TU_Berlin/SoSe20/SkSy/BAT/docker/media_sksys-bat-7a5cdc1a851f.json"
-# )
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    "docker/media_sksys-bat-7a5cdc1a851f.json"
+)
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-# GS_BUCKET_NAME = 'bat-media'
-# GS_PROJECT_ID = 'sksys-bat'
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+GS_BUCKET_NAME = 'bat-media'
+GS_PROJECT_ID = 'sksys-bat'
