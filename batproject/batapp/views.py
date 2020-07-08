@@ -150,9 +150,14 @@ def get_untagged_picture(request):
         return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
 
 @login_required()
-def save_rectangle(request):
-    data = request.POST
-    #data = json.loads(data_un)
+def tag(request):
+    #data_un = request.POST
+    #data_un = request.body
+    print(request.body)
+    data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
+    #data = json.loads(request.body)
+    data = json.loads(data)
+    print(data)
     Coord.objects.create(x=data['x'], y=data['y'], width=data['width'], height=data['height'], belongs_to_pic=request.user.last_picture.rect)
     in_progress_p = StatusPicture.objects.get(status_type='in_progress')
     tagged_p = StatusPicture.objects.get(status_type='tagged')
@@ -167,6 +172,6 @@ def save_rectangle(request):
 
 @login_required()
 @csrf_exempt
-def tag(request):
+def tag2(request):
     print(request.body) # The JSON content
     return HttpResponse('{"success": true}')

@@ -14,5 +14,6 @@ urlpatterns = [
     path('getuserimages', views.get_images_uploaded_by_user, name='getuserimages'),
     path('getusertaggedimages', views.get_images_tagged_by_user, name='getusertaggedimages'),
     path('tag', views.tag, name='tag'),
+    path('getall', views.get_all_images, name='getall'),
 ]
 
