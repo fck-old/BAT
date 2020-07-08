@@ -57,6 +57,19 @@ $(document).ready(function() {
     var $canvas = $("#canvas");
     var ctx = $canvas[0].getContext('2d');
     
+    // Functions to help keep element in middle point when zooming
+    function calcMiddleTranslation() {
+        var x = translationX / cFactor;
+        var y = translationY / cFactor;
+        return {x, y};
+    }
+    
+    function setMiddleTranslation(transObj) {
+        translationX = transObj.x * cFactor;
+        translationY = transObj.y * cFactor;
+        redraw();
+    }
+    
     // Redraw function
     function redraw() {
         // Translate
@@ -149,6 +162,10 @@ $(document).ready(function() {
     function startDrawing(event) {
         event.preventDefault();
         
+        if (isTagged) {
+            return;
+        }
+        
         backupStartX = coords.start.x;
         backupStartY = coords.start.y;
         backupStopX = coords.stop.x;
@@ -175,6 +192,7 @@ $(document).ready(function() {
         drawing = false;
         ctx.clearRect(0, 0, $canvas[0].width, $canvas[0].height);
         redraw();
+        tagTrigger();
     }
     
     function draw(event) {
@@ -231,8 +249,7 @@ $(document).ready(function() {
     var gestureStartZoom;
     var gestureStartFingerPosX;
     var gestureStartFingerPosY;
-    var gestureStartXValue;
-    var gestureStartYValue;
+    var gestureStartTransObj;
     
     $(document).on("gesturestart", function(event) {
         event.preventDefault();
@@ -244,8 +261,7 @@ $(document).ready(function() {
         gestureStartZoom = zoom;
         gestureStartFingerPosX = event.clientX;
         gestureStartFingerPosY = event.clientY;
-        gestureStartXValue = translationX;
-        gestureStartYValue = translationY;
+        gestureStartTransObj = calcMiddleTranslation();
     });
     
     $(document).on("gesturechange", function(event) {
@@ -257,12 +273,17 @@ $(document).ready(function() {
         
         // Zoom
         zoom = gestureStartZoom * event.originalEvent.scale;
+        redraw(); // needed so we get new cFactor for setMiddleTranslation()
+        setMiddleTranslation(gestureStartTransObj);
+        
+        gestureStartCorrectedTranslationX = translationX;
+        gestureStartCorrectedTranslationY = translationY;
         
         // Translate
         var deltaX = event.clientX - gestureStartFingerPosX;
         var deltaY = event.clientY - gestureStartFingerPosY;
-        translationX = gestureStartXValue + deltaX;
-        translationY = gestureStartYValue + deltaY;
+        translationX = gestureStartCorrectedTranslationX + deltaX;
+        translationY = gestureStartCorrectedTranslationY + deltaY;
         
         // Redraw
         redraw();
@@ -301,6 +322,10 @@ $(document).ready(function() {
     function startRecting(event) {
         event.preventDefault();
         
+        if (isTagged) {
+            return;
+        }
+        
         backupStartX = coords.start.x;
         backupStartY = coords.start.y;
         backupStopX = coords.stop.x;
@@ -333,6 +358,7 @@ $(document).ready(function() {
         
         recting = false;
         redraw();
+        tagTrigger();
     }
     
     function rect(event) {
@@ -393,6 +419,109 @@ $(document).ready(function() {
     
     
     
+    
+    
+    
+    
+    
+    // New
+    var isTagged = false;
+    
+    
+    $isNotTaggedButtonArray = $("#is-not-tagged-button-array");
+    $isTaggedButtonArray = $("#is-tagged-button-array");
+    $tagReset = $("#tag-reset");
+    $tagSave = $("#tag-save");
+    
+    function tagTrigger() {
+        isTagged = true;
+        $isNotTaggedButtonArray.addClass("d-none");
+        $isTaggedButtonArray.removeClass("d-none");
+    }
+    
+    function tagReset() {
+        resetCoords();
+        redraw();
+        $isNotTaggedButtonArray.removeClass("d-none");
+        $isTaggedButtonArray.addClass("d-none");
+        isTagged = false;
+    }
+    $tagReset.click(tagReset);
+    
+    
+    
+    function tagSave() {
+        var tagInfo = getCoordiates();
+        tagInfo.id = currentImageData.id;
+        
+        $.post("/tag", JSON.stringify(tagInfo), function(data) {
+            var result = JSON.parse(data);
+            if (result.success == true) {
+                tagReset();
+                getImage();
+            } else {
+                alert("Tag couldn't be saved!");
+            }
+        });
+    }
+    $tagSave.click(tagSave);
+    
+    
+    
+    function getCoordiates() {
+        var coordinates = {};
+        
+        coordinates.x = coords.start.x;
+        coordinates.y = coords.start.y;
+        coordinates.width = coords.stop.x - coords.start.x;
+        coordinates.height = coords.stop.y - coords.start.y;
+        
+        return coordinates;
+    }
+    
+    
+    var currentImageData;
+    function getImage() {
+        $.get("/untagged", function(data) {
+          currentImageData = JSON.parse(data);
+          
+          if (currentImageData.image) {
+            loadImage(currentImageData.url);
+            $("#totag").text(currentImageData.label);
+          } else {
+            setTimeout(function() {
+                getImage();
+            }, 200);
+          }
+          
+        });
+    }
+    
+    
+    $("#skip").click(function() {
+        getImage();
+    });
+    
+    
+    getImage();
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     // TODO
     
     
@@ -407,13 +536,17 @@ $(document).ready(function() {
     
     // Enable keyboard shortcuts and control buttons
     function plus() {
+        var transObj = calcMiddleTranslation();
         zoom += 10;
-        redraw();
+        redraw()
+        setMiddleTranslation(transObj);
     }
     
     function minus() {
+        var transObj = calcMiddleTranslation();
         zoom -= 10;
-        redraw();
+        redraw()
+        setMiddleTranslation(transObj);
     }
     
     function reset() {
@@ -491,29 +624,7 @@ $(document).ready(function() {
     
     
     
-    function getImage() {
-        $.get( "/untagged/", function(data) {
-          var data = JSON.parse(data);
-          
-          if (data.image) {
-            loadImage(data.url);
-            $("#totag").text(data.label);
-          } else {
-            setTimeout(function() {
-                getImage();
-            }, 200);
-          }
-          
-        });
-    }
     
-    
-    $("#skip").click(function() {
-        getImage();
-    });
-    
-    
-    getImage();
     
     
 });

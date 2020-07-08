@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 # Create your views here.
 from django.template import loader
 from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
 
 from batapp.forms import PictureForm
 from .models import Picture, StatusPicture, Muell, Coord, CoordHead
@@ -146,7 +147,7 @@ def get_untagged_picture(request):
         print(request.user.last_picture)
         #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
         #untagged_p.save()
-        return HttpResponse('{"url": "", "label": "", "image": false}')
+        return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
 
 @login_required()
 def save_rectangle(request):
@@ -161,3 +162,11 @@ def save_rectangle(request):
     request.user.last_picture = -1
     #data['id']
     return HttpResponse('Saving successful')
+
+
+
+@login_required()
+@csrf_exempt
+def tag(request):
+    print(request.body) # The JSON content
+    return HttpResponse('{"success": true}')
