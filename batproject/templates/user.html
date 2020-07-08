@@ -1,28 +1,133 @@
-{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{% static 'batapp/lib/css/bootstrap.min.css' %}">
 
-{% block body %}
-  <div class="container">
-    <h2>Your user infos</h2>
-    <form method="post" novalidate>
-      {% csrf_token %}
-      <h2>{{ user.get_full_name }}</h2>
-<ul>
-  <li>Username: {{ user.username }}</li>
-  <li>Email: {{ user.email }}</li>
-    <li>firstname: {{ user.first_name }}</li>
-  <li>lastname: {{ user.last_name }}</li>
-</ul>
-    </form>
-  </div>
-<div class="container">
-    <div>Übersicht (diese Seite): <a href= "{% url 'functions' %}"> {% url 'functions' %} </a> </div>
-    <div>Account anlegen: <a href= "{% url 'signup' %}"> {% url 'signup' %} </a> </div>
-    <div>einloggen: <a href= "{% url 'login' %}"> {% url 'login' %} </a> </div>
-    <div>ausloggen: <a href= "{% url 'logout' %}"> {% url 'logout' %} </a> </div>
-    <div>Bilder hochladen: <a href= "{% url 'upload' %}"> {% url 'upload' %} </a> </div>
-    <div>(alle) Bilder vom Server abrufen: <a href= "{% url 'getimages' %}"> {% url 'getimages' %} </a> </div>
-    <div>Passwort ändern: <a href= "{% url 'changePassword' %}"> {% url 'changePassword' %} </a> </div>
-    <div>Profil ändern: <a href= "{% url 'changeProfile' %}"> {% url 'changeProfile' %} </a> </div>
-    <div>Account löschen: <a href= "{% url 'deleteAccount' %}"> {% url 'deleteAccount' %} </a> </div>
-</div>
-{% endblock %}>
+    <!-- Custom styles -->
+    <link rel="stylesheet" href="{% static 'batapp/dashboard.css' %}">
+    
+    <title>BAT - Dashboard</title>
+  </head>
+  <body>
+     
+    <nav id="navbar" class="navbar navbar-dark sticky-top flex-md-nowrap p-0 shadow">
+      <a class="navbar-brand col-md-3 col-lg-2 mr-0 px-3" href="{% url 'index' %}">{{ user.username }}</a>
+      <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-toggle="collapse" data-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+
+    <div id="main-container" class="container-fluid h-100-m-48">
+      <div id="main-row" class="row h-100">
+        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block sidebar collapse">
+          <div class="sidebar-sticky pt-3">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                  <span data-feather="home"></span>
+                  Main Feed
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file"></span>
+                  My Jobs
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="#">
+                  <span data-feather="shopping-cart"></span>
+                  Account <span class="sr-only">(current)</span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'logout' %}">
+                  Logout
+                </a>
+              </li>
+            </ul>
+
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span>Custom Feeds</span>
+              <a class="d-flex align-items-center text-muted" href="#" aria-label="Add a new report">
+                <span data-feather="plus-circle"></span>
+              </a>
+            </h6>
+            <ul class="nav flex-column mb-2">
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Berlin Smart City
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  DOS @ TU Berlin
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  TU München
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">
+                  <span data-feather="file-text"></span>
+                  Einstein Center
+                </a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+
+        <main id="main" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+          <div class="container">
+          <h2>Your user infos</h2>
+
+            <form class="form-change" method="post" novalidate>
+              <table class="table table-light table-borderless">
+                <tbody>
+                  <tr>
+                    <th scope="row">Username:</th>
+                    <td>{{ user.username }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">First Name:</th>
+                    <td>{{user.first_name}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Last Name:</th>
+                    <td>{{user.last_name}}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Email:</th>
+                    <td>{{ user.email }}</td>
+                  </tr>
+              </table>
+            </form>
+          </div>
+
+          <a class="btn btn-primary" href="{% url 'changeProfile' %}" role="button">Change Profile</a>
+          <a class="btn btn-primary" href="{% url 'changePassword' %}" role="button">Change Password</a>
+          <a class="btn btn-danger" href="{% url 'deleteAccount' %}" role="button">Delete Account</a>
+
+
+      </div>
+    </div>  
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="{% static 'batapp/lib/js/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'batapp/lib/js/popper.min.js' %}"></script>
+    <script src="{% static 'batapp/lib/js/bootstrap.min.js' %}"></script>
+    {% comment %} <script src="{% static 'batapp/dashboard.js' %}"></script> {% endcomment %}
+  </body>
+</html>

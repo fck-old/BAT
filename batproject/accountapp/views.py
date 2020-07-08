@@ -10,7 +10,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login, update_session_auth_hash
 from django.shortcuts import render
 from django.http import HttpResponse
-from .forms import SignUpForm, ChangeProfileForm, LoginForm
+from .forms import SignUpForm, ChangeProfileForm, LoginForm, ChangePasswordForm
 from .models import User
 
 
@@ -48,18 +48,20 @@ def login(request):
         print("gib html aus")
     return render(request, 'accountapp/login.html', {'form': form})
 
+def user(request):
+    return render(request, 'user.html', None)
 
 @login_required
 def changePassword(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = ChangePasswordForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             context = {'username': request.user.username, 'email': request.user.email}
             return render(request, 'user.html', context)
     else:
-        form = PasswordChangeForm(request.user)
+        form = ChangePasswordForm(request.user)
     return render(request, 'changePassword.html', {'form': form})
 
 
@@ -74,7 +76,7 @@ def changeProfile(request):
             user.last_name = form.cleaned_data['last_name']
             user.save()
             update_session_auth_hash(request, user)
-            return render(request, 'user.html', None)
+            return redirect('user')
     else:
         form = ChangeProfileForm()
     return render(request, 'changeProfile.html', {'form': form})
@@ -88,7 +90,6 @@ def deleteAccount(request):
         return render(request, 'functionality.html', None)
     else:
         return render(request, 'deleteAccount.html', None)
-
 
 def home(request):
     return HttpResponse(request.user)

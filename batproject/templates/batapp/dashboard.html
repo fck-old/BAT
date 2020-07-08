@@ -42,7 +42,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{% url 'user' %}">
                   <span data-feather="shopping-cart"></span>
                   Account
                 </a>
@@ -95,7 +95,15 @@
             <h1 class="h2">Tag: <span id="totag">Crosswalk</span></h1>
             <div class="btn-toolbar mb-2 mb-md-0">
               <div class="btn-group mr-2">
-                <button type="button" id="skip" class="btn btn-sm btn-outline-secondary">Skip image</button>
+                
+                <span id="is-not-tagged-button-array">
+                  <button type="button" id="skip" class="btn btn-sm btn-outline-secondary">Skip image</button>
+                </span>
+                <span id="is-tagged-button-array" class="d-none">
+                  <button type="button" id="tag-reset" class="btn btn-sm btn-danger">Reset</button>
+                  <button type="button" id="tag-save" class="btn btn-sm btn-success">Save</button>
+                </span>
+                
               </div>
             </div>
           </div>
