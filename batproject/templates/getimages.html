@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
     {% block content %}
-        {% for p in pictures %}
+        {% for p, rec_list in pic_list %}
             <div class="col-md-4">
                 <img src= "{{p.picture_path_file.url}}" class="image-responsive" style="width: 100%; float: left; margin-right: 10px;" />
             </div>
             <div>
                 {{p.label}}
                 {% if p.status.status_type == "tagged" %}
-                    {% for l in p.rect.rectangles %}
+                    {% for l in rec_list %}
                         {{l.x}}
                         {{l.y}}
                         {{l.width}}

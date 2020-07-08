@@ -80,11 +80,15 @@ def get_images_uploaded_by_user(request):
 @login_required()
 def get_images_tagged_by_user(request):
 
-    pictures = Picture.objects.filter(tagged_by=request.user)
+    tagged_p = StatusPicture.objects.get(status_type='tagged')
+    pictures = tagged_p.pictures.filter(tagged_by=request.user)
     if pictures.first() is None:
         return HttpResponse('no pictures found')
-
-    return render(request, 'getimages.html', {'pictures': pictures})
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
 
 
 def functionality(request):
@@ -150,23 +154,29 @@ def get_untagged_picture(request):
         return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
 
 @login_required()
+@csrf_exempt
 def tag(request):
     #data_un = request.POST
     #data_un = request.body
     print(request.body)
-    data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
-    #data = json.loads(request.body)
-    data = json.loads(data)
+    #data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
+    data = json.loads(request.body)
+    #data = json.loads(data)
     print(data)
-    Coord.objects.create(x=data['x'], y=data['y'], width=data['width'], height=data['height'], belongs_to_pic=request.user.last_picture.rect)
-    in_progress_p = StatusPicture.objects.get(status_type='in_progress')
     tagged_p = StatusPicture.objects.get(status_type='tagged')
-    pic = in_progress_p.pictures.filter(id=request.user.last_picture)
+    in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+    pic = in_progress_p.pictures.get(id=request.user.last_picture)
+    print("Header Id:")
+    print(pic.rect.id)
+    Coord.objects.create(x=int(data['x']), y=int(data['y']), width=int(data['width']), height=int(data['height']), belongs_to_pic=pic.rect)
     pic.status = tagged_p
     pic.tagged_by = request.user
+    pic.save()
     request.user.last_picture = -1
+    request.user.save()
     #data['id']
-    return HttpResponse('Saving successful')
+    return HttpResponse('{"success": true}')
+    #return HttpResponse('Saving successful')
 
 
 
