@@ -483,17 +483,17 @@ $(document).ready(function() {
     var currentImageData;
     function getImage() {
         $.get("/untagged", function(data) {
-          currentImageData = JSON.parse(data);
-          
-          if (currentImageData.image) {
-            loadImage(currentImageData.url);
-            $("#totag").text(currentImageData.label);
-          } else {
-            setTimeout(function() {
-                getImage();
-            }, 200);
-          }
-          
+            currentImageData = JSON.parse(data);
+            
+            if (currentImageData.image) {
+                loadImage(currentImageData.url);
+                $("#totag").text(currentImageData.label);
+            } else {
+                setTimeout(function() {
+                    getImage();
+                }, 200);
+            }
+            
         });
     }
     
