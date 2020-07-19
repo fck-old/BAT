@@ -66,7 +66,7 @@ def get_all_images(request):
         # p.picture_path_file = 'http://127.0.0.1:8000/batapp' + p.picture_path_file.url # hier geaendert
         # print('Das wird zusammengefuegt:')
         # print('http://127.0.0.1:8000/batapp' + ([str)p.picture_path_file)  # hier geaendert
-    return render(request, 'getimages.html', {'pictures': pictures})
+    return render(request, 'getimages1.html', {'pictures': pictures})
 
 
 @login_required()
@@ -74,14 +74,39 @@ def get_images_uploaded_by_user(request):
 
     pictures = Picture.objects.filter(uploaded_by=request.user)
 
-    return render(request, 'getimages.html', {'pictures': pictures})
-
+    return render(request, 'getimages1.html', {'pictures': pictures})
 
 @login_required()
 def get_images_tagged_by_user(request):
 
+    #tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.tagged.all()
+    #tagged_p.pictures.filter(tagged_by=request.user)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
+
+@login_required()
+def get_images_tagged_by_user1(request):
+
     tagged_p = StatusPicture.objects.get(status_type='tagged')
     pictures = tagged_p.pictures.filter(tagged_by=request.user)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
+
+@login_required()
+def get_tagged_images_uploaded_by_user(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
     if pictures.first() is None:
         return HttpResponse('no pictures found')
     pic_list = []

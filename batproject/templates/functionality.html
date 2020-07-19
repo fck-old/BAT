@@ -13,6 +13,7 @@
             <div>Account löschen: <a href= "{% url 'deleteAccount' %}"> {% url 'deleteAccount' %} </a> </div>
             <div>ungetaggtes Bild vom Server abrufen mit der Möglichkeit zu skippen: <a href= "{% url 'get_untagged' %}"> {% url 'get_untagged' %} </a> </div>
             <div>User ruft die Bilder ab, die er hochgeladen hat: <a href= "{% url 'getuserimages' %}"> {% url 'getuserimages' %} </a> </div>
+            <div>User ruft die Bilder ab, die er hochgeladen hat und die getagged worden sind: <a href = "{% url 'gettaggeduploadedbyuser' %}"> {% url 'gettaggeduploadedbyuser' %}</a></div>
             <div>User ruft die Bilder ab, die er getagged hat: <a href= "{% url 'getusertaggedimages' %}"> {% url 'getusertaggedimages' %} </a> </div>
             <div>User taggt Bilder, AJAX Post Request: <a href= "{% url 'tag' %}"> {% url 'tag' %} </a> </div>
 
