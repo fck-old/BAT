@@ -10,7 +10,7 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from batapp.forms import PictureForm
+from batapp.forms import PictureForm, PictureDeleteForm
 from .models import Picture, StatusPicture, Muell, Coord, CoordHead
 
 
@@ -212,8 +212,25 @@ def tag2(request):
     print(request.body) # The JSON content
     return HttpResponse('{"success": true}')
 
+
+@login_required()
 def delete_picture(request):
-    p = Picture.objects.get(id=30)
-    print(p.picture_path_file.path)
-    default_storage.delete(p.picture_path_file.path)
-    return HttpResponse("Delete successful")
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            print(p.picture_path_file.path)
+            default_storage.delete(p.picture_path_file.path)
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+    #p = Picture.objects.get(id=30)
+    #print(p.picture_path_file.path)
+    #default_storage.delete(p.picture_path_file.path)
+    #return HttpResponse("Delete successful")
