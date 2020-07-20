@@ -1,6 +1,7 @@
 import json
 
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -210,3 +211,9 @@ def tag(request):
 def tag2(request):
     print(request.body) # The JSON content
     return HttpResponse('{"success": true}')
+
+def delete_picture(request):
+    p = Picture.objects.get(id=30)
+    print(p.picture_path_file.path)
+    default_storage.delete(p.picture_path_file.path)
+    return HttpResponse("Delete successful")

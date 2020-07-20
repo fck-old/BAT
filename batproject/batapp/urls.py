@@ -16,5 +16,6 @@ urlpatterns = [
     path('gettaggeduploadedbyuser', views.get_tagged_images_uploaded_by_user, name='gettaggeduploadedbyuser'),
     path('tag', views.tag, name='tag'),
     path('getall', views.get_all_images, name='getall'),
+    path('deletepic', views.delete_picture, name='deletepic')
 ]
 
