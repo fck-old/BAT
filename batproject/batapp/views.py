@@ -222,8 +222,8 @@ def delete_picture(request):
         if form.is_valid():
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
-            print(p.picture_path_file.path)
-            default_storage.delete(p.picture_path_file.path)
+            print(p.picture_path_file.name)
+            default_storage.delete(p.picture_path_file.name)
             p.delete()
             return HttpResponse('Delete successful')
 
