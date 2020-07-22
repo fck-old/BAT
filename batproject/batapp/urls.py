@@ -17,6 +17,7 @@ urlpatterns = [
     path('gettaggeduploadedbyuserjson', views.get_tagged_images_uploaded_by_user_json, name='gettaggeduploadedbyuserjson'),
     path('tag', views.tag, name='tag'),
     path('getall', views.get_all_images, name='getall'),
-    path('deletepic', views.delete_picture, name='deletepic')
+    path('deletepic', views.delete_picture, name='deletepic'),
+    path('download', views.test_creating_metafile, name='download')
 ]
 

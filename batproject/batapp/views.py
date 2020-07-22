@@ -1,6 +1,8 @@
 import json
+from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -11,7 +13,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
 from batapp.forms import PictureForm, PictureDeleteForm
-from .models import Picture, StatusPicture, Muell, Coord, CoordHead
+from .models import Picture, StatusPicture, Muell, Coord, CoordHead, Testfilecreate
 
 
 def index(request):
@@ -218,6 +220,19 @@ def tag(request):
     pic.save()
     request.user.last_picture = -1
     request.user.save()
+    pa = Path(pic.picture_path_file.name)
+    print(pa)
+    meta_name = pa.with_suffix('.json')
+    print(meta_name)
+    meta_name = meta_name.name
+    print(meta_name)
+    #meta_f = Testfilecreate()
+    #r = p.rect.rectangles.first()
+    meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
+    meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+    print(meta_data)
+    f = open(meta_name, 'wt')
+    pic.metadata_file.save(meta_name, ContentFile(meta_data))
     #data['id']
     return HttpResponse('{"success": true}')
     #return HttpResponse('Saving successful')
@@ -252,3 +267,41 @@ def delete_picture(request):
     #print(p.picture_path_file.path)
     #default_storage.delete(p.picture_path_file.path)
     #return HttpResponse("Delete successful")
+
+@login_required()
+def test_creating_metafile(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        pic_list.append((p.picture_path_file.url, p.metadata_file.url))
+    return render(request, 'download.html', {'pic_list': pic_list})
+
+
+@login_required()
+def test_creating_metafile2(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        #rec_list = p.rect.rectangles.all()
+        #r = rec_list.first()
+        pa = Path(p.picture_path_file.name)
+        print(pa)
+        meta_name = pa.with_suffix('.json')
+        print(meta_name)
+        meta_name = meta_name.name
+        print(meta_name)
+        meta_f = Testfilecreate()
+        r = p.rect.rectangles.first()
+        meta_data = {'label': p.label, 'x': r.x, 'y': r.y, 'width': r.width, 'height': r.height}
+        meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+        print(meta_data)
+        f = open(meta_name, 'wt')
+        meta_f.metadata_file.save(meta_name, ContentFile(meta_data))
+        pic_list.append((p.picture_path_file.url, meta_f.metadata_file.url))
+    return render(request, 'download.html', {'pic_list': pic_list})
