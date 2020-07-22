@@ -117,6 +117,24 @@ def get_tagged_images_uploaded_by_user(request):
     return render(request, 'getimages.html', {'pic_list': pic_list})
 
 
+@login_required()
+def get_tagged_images_uploaded_by_user_json(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        #rec_list = p.rect.rectangles.all()
+        #r = rec_list.first()
+        r = p.rect.rectangles.first()
+        meta_data = {'label': p.label, 'x': r.x, 'y': r.y, 'width': r.width, 'height': r.height}
+        meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+        print(meta_data)
+        pic_list.append((p.picture_path_file.url, meta_data))
+    return render(request, 'getimages2.html', {'pic_list': pic_list})
+
+
 def functionality(request):
 
     return render(request, 'functionality.html')
