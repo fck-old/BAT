@@ -22,6 +22,8 @@ class Picture(models.Model):
     uploaded_by = models.ForeignKey(User, related_name='uploaded', on_delete=models.CASCADE, null=True)
     tagged_by = models.ForeignKey(User, related_name='tagged', on_delete=models.CASCADE,  null=True)
     rect = models.ForeignKey(CoordHead, related_name='forpic', on_delete=models.CASCADE,  null=True)
+    metadata_file = models.FileField(upload_to='metafiles/', null=True)
+
 
 class Coord(models.Model):
     x = models.IntegerField()
@@ -32,5 +34,8 @@ class Coord(models.Model):
 
 class Muell(models.Model):
     status_type = models.CharField(max_length=20, default='tba')
+
+class Testfilecreate(models.Model):
+    metadata_file = models.FileField(upload_to='testfiles/', null=True)
 
 
