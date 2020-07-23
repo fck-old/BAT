@@ -256,6 +256,8 @@ def delete_picture(request):
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
             print(p.picture_path_file.name)
+            print(p.picture_path_file.url)
+            print(p.picture_path_file.path)
             default_storage.delete(p.picture_path_file.name)
             p.delete()
             return HttpResponse('Delete successful')
@@ -305,3 +307,19 @@ def test_creating_metafile2(request):
         meta_f.metadata_file.save(meta_name, ContentFile(meta_data))
         pic_list.append((p.picture_path_file.url, meta_f.metadata_file.url))
     return render(request, 'download.html', {'pic_list': pic_list})
+
+@login_required()
+def delete_picture_alt(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            default_storage.delete(p.picture_path_file.url)
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
