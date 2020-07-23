@@ -18,6 +18,7 @@ urlpatterns = [
     path('tag', views.tag, name='tag'),
     path('getall', views.get_all_images, name='getall'),
     path('deletepic', views.delete_picture, name='deletepic'),
-    path('download', views.test_creating_metafile, name='download')
+    path('download', views.test_creating_metafile, name='download'),
+    path('delete_alt', views.delete_picture_alt, name='delete_alt')
 ]
 
