@@ -10,11 +10,12 @@
 {% endblock %}
 
 {% block javascripts %}
+  <script src="{% static 'batapp/feed.js' %}"></script>
 {% endblock %}
 
 {% block main %}
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
-    <h1 class="h2">Tag: <span id="totag">Crosswalk</span></h1>
+    <h1 class="h2">Tag: <span id="totag">Loading...</span></h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
         
@@ -29,9 +30,6 @@
       </div>
     </div>
   </div>
-  
-  
-  
   
   <!-- CANVAS -->
   <div id="todo-buttons">
@@ -57,7 +55,7 @@
       <canvas id="canvas"></canvas>
     </div>
     <div id="loading">
-      Laden...
+      Loading...
     </div>
   </div>
   <!-- END: CANVAS -->

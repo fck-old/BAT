@@ -5,8 +5,12 @@ from accountapp import views as account_views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('dashboard', views.index, name='dashboard'),
     path('dashboard/feed', views.feed, name='feed'),
     path('dashboard/account', account_views.account, name='account'),
+    path('dashboard/account/password', account_views.changePassword, name='changePassword'),
+    path('dashboard/account/profile', account_views.changeProfile, name='changeProfile'),
+    path('dashboard/account/delete', account_views.deleteAccount, name='deleteAccount'),
     
     path('help', views.functionality, name='functions'),
     path('upload', views.upload_image, name='upload'),

@@ -29,7 +29,7 @@
           <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'dashboard' %}">
+                <a class="nav-link" href="{% url 'feed' %}">
                   <span data-feather="home"></span>
                   Main Feed
                 </a>
@@ -41,7 +41,7 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="{% url 'user' %}">
+                <a class="nav-link active" href="{% url 'account' %}">
                   <span data-feather="shopping-cart"></span>
                   Account <span class="sr-only">(current)</span>
                 </a>
@@ -90,14 +90,14 @@
 
         <main id="main" role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
           <div class="container">
-            <h2>Change Password</h2>
+            <h2>Change User Settings</h2>
             <form class="form-change" method="post" novalidate>
               {% csrf_token %}
               {% for field in form %}
                   {{field}}
               {% endfor %}
-              <button type="submit" class="btn btn-primary">Change Password</button>
-              <a class="btn btn-warning" href="{% url 'user' %}" role="button">Back</a>
+              <button type="submit" class="btn btn-primary">Change Profile</button>
+              <a class="btn btn-warning" href="{% url 'account' %}" role="button">Back</a>
             </form>
           </div>
         </main>
