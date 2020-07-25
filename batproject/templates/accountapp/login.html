@@ -4,17 +4,19 @@
     <form class="form-signin" method="post" novalidate>
       <img class="mb-4" src="{% static 'accountapp/img/logo_web.png' %}" alt="" width="100" height="100">
       <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-
-      {% comment %} <label for="inputUsername" class="sr-only">Username</label>
-      <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required> {% endcomment %}
-
+      
       {% csrf_token %}
       {% for field in form %}
+          <div class="field-wrapper">
           {{field}}
+          {% if field.errors %}
+              <span class="alert alert-danger field-error">
+                {{ field.errors.0|escape }}
+              </span>
+          {% endif %}
+          </div>
       {% endfor %}
-
+      
       <div class="checkbox mb-3">
         <label>
           <input type="checkbox" value="remember-me"> Remember me

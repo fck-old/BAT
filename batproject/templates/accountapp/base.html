@@ -15,6 +15,15 @@
     <title>BAT</title>
   </head>
   <body class="text-center">
+    {% if form.errors %}
+      <div id="form-errors">
+      {% for error in form.non_field_errors %}
+        <div class="alert alert-danger non-field-error">
+          {{ error }}
+        </div>
+      {% endfor %}
+      </div>
+    {% endif %}
     
     {% block form %}
     {% endblock %}
