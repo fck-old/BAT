@@ -1,14 +1,16 @@
 from django.urls import path
 
 from . import views
+from accountapp import views as account_views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('feed', views.feed, name='feed'),
+    path('dashboard/feed', views.feed, name='feed'),
+    path('dashboard/account', account_views.account, name='account'),
     
     path('help', views.functionality, name='functions'),
     path('upload', views.upload_image, name='upload'),
-    path('getimages/', views.get_all_images, name='getimages'),
+    path('getimages', views.get_all_images, name='getimages'),
     path('init', views.initialise_status_types, name='init'),
     path('untagged', views.get_untagged_picture, name='get_untagged'),
     path('getuserimages', views.get_images_uploaded_by_user, name='getuserimages'),

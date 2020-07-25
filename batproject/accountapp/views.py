@@ -48,8 +48,8 @@ def login(request):
         print("gib html aus")
     return render(request, 'accountapp/login.html', {'form': form})
 
-def user(request):
-    return render(request, 'user.html', None)
+def account(request):
+    return render(request, 'batapp/account.html', None)
 
 @login_required
 def changePassword(request):
