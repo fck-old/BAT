@@ -1,6 +1,6 @@
 import os
 
-if os.environ['DJANGO_SETTINGS'] == "prod":
+if os.getenv('DJANGO_SETTINGS'):
     print("PROD SERVER")
     from .settings_prod import *
 else:
