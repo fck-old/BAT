@@ -12,7 +12,7 @@ import os
 ############################################################
 
 print("DEV SERVER")
-from .setttings_dev import *
+from .settings_dev import *
 
 
 #print("PROD SERVER")
