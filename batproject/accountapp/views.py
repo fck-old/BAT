@@ -50,7 +50,7 @@ def loginOBSOLETE(request):
     return render(request, 'accountapp/login.html', {'form': form})
 
 def account(request):
-    return render(request, 'batapp/account.html', None)
+    return render(request, 'batapp/account.html', {'nav': 'account'})
 
 @login_required
 def changePassword(request):
@@ -63,7 +63,7 @@ def changePassword(request):
             return render(request, 'batapp/account.html', context)
     else:
         form = ChangePasswordForm(request.user)
-    return render(request, 'batapp/changePassword.html', {'form': form})
+    return render(request, 'batapp/changePassword.html', {'form': form, 'nav': 'account'})
 
 
 @login_required
@@ -80,7 +80,7 @@ def changeProfile(request):
             return redirect('account')
     else:
         form = ChangeProfileForm()
-    return render(request, 'batapp/changeProfile.html', {'form': form})
+    return render(request, 'batapp/changeProfile.html', {'form': form, 'nav': 'account'})
 
 
 @login_required
@@ -90,7 +90,7 @@ def deleteAccount(request):
         u.delete()
         return redirect('index')
     else:
-        return render(request, 'batapp/deleteAccount.html', None)
+        return render(request, 'batapp/deleteAccount.html', {'nav': 'account'})
 
 def home(request):
     return HttpResponse(request.user)

@@ -32,26 +32,24 @@
           <div class="sidebar-sticky pt-3">
             <ul class="nav flex-column">
               <li class="nav-item">
-                <a class="nav-link active" href="{% url 'feed' %}">
+                <a class="nav-link{% if nav == 'feed' %} active{% endif %}" href="{% url 'feed' %}">
                   <span data-feather="home"></span>
-                  Main Feed <span class="sr-only">(current)</span>
+                  Main Feed{% if nav == 'feed' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">
-                  <span data-feather="file"></span>
-                  My Jobs
+                <a class="nav-link{% if nav == 'jobs' %} active{% endif %}" href="#">
+                  My Jobs{% if nav == 'jobs' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'account' %}">
-                  <span data-feather="shopping-cart"></span>
-                  Account
+                <a class="nav-link{% if nav == 'account' %} active{% endif %}" href="{% url 'account' %}">
+                  Account{% if nav == 'account' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">
-                  Logout
+                <a class="nav-link{% if nav == 'logout' %} active{% endif %}" href="{% url 'logout' %}">
+                  Logout{% if nav == 'logout' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
             </ul>
@@ -64,27 +62,23 @@
             </h6>
             <ul class="nav flex-column mb-2">
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'feed' %}">
-                  <span data-feather="file-text"></span>
-                  Berlin Smart City
+                <a class="nav-link{% if nav == 'custom-1' %} active{% endif %}" href="{% url 'feed' %}">
+                  Berlin Smart City{% if nav == 'custom-1' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'feed' %}">
-                  <span data-feather="file-text"></span>
-                  DOS @ TU Berlin
+                <a class="nav-link{% if nav == 'custom-2' %} active{% endif %}" href="{% url 'feed' %}">
+                  DOS @ TU Berlin{% if nav == 'custom-2' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'feed' %}">
-                  <span data-feather="file-text"></span>
-                  TU München
+                <a class="nav-link{% if nav == 'custom-3' %} active{% endif %}" href="{% url 'feed' %}">
+                  TU München{% if nav == 'custom-3' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'feed' %}">
-                  <span data-feather="file-text"></span>
-                  Einstein Center
+                <a class="nav-link{% if nav == 'custom-4' %} active{% endif %}" href="{% url 'feed' %}">
+                  Einstein Center{% if nav == 'custom-4' %} <span class="sr-only">(current)</span>{% endif %}
                 </a>
               </li>
             </ul>
