@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
-from django.core.files.base import ContentFile
+from django.core.files.base import ContentFile, File
 from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -204,8 +204,60 @@ def get_untagged_picture(request):
 def tag(request):
     #data_un = request.POST
     #data_un = request.body
-    print(request.body)
+    #print(request.body)
     #data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
+    if request.user.is_superuser or request.user.username == 'GreatDebugger1' or request.user.username == 'GreatDebugger2' \
+            or request.user.username == 'GreatDebugger3' or request.user.username == 'GreatDebugger4' or request.user.username == 'GreatDebugger5':
+        data = json.loads(request.body)
+        # data = json.loads(data)
+        print(data)
+        tagged_p = StatusPicture.objects.get(status_type='tagged')
+        in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+        pic = in_progress_p.pictures.get(id=request.user.last_picture)
+        print("Header Id:")
+        print(pic.rect.id)
+        Coord.objects.create(x=int(data['x']), y=int(data['y']), width=int(data['width']), height=int(data['height']),
+                             belongs_to_pic=pic.rect)
+        pic.status = tagged_p
+        pic.tagged_by = request.user
+        pic.save()
+        request.user.last_picture = -1
+        request.user.save()
+        pa = Path(pic.picture_path_file.name)
+        print(pa)
+        if request.user.username == 'GreatDebugger1':
+            return render(request, 'answer.html', {'s': 'erstes Python Path Kommando erfolgreich ausgefuehrt'})
+        meta_name = pa.with_suffix('.json')
+        print(meta_name)
+        meta_name = meta_name.name
+        print(meta_name)
+        if request.user.username == 'GreatDebugger2':
+            return render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
+        # meta_f = Testfilecreate()
+        # r = p.rect.rectangles.first()
+        meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']),
+                     'height': int(data['height'])}
+        meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+        print(meta_data)
+        if request.user.username == 'GreatDebugger3':
+            return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
+        pathfile = 'metafiles/' + meta_name
+        f = default_storage.open(pathfile, 'wt')
+        ff = File(f)
+        if request.user.username == 'GreatDebugger4':
+            return render(request, 'answer.html', {'s': 'Metadaten-Datei angelegt'})
+        ff.write(meta_data)
+        ff.close()
+        if request.user.username == 'GreatDebugger5':
+            return render(request, 'answer.html', {'s': 'Metadaten-Datei beschrieben'})
+        ff.open('r')
+        print("mit explizitem open")
+        pic.metadata_file.save(meta_name, ff)
+        ff.close()
+        # data['id']
+        return HttpResponse('{"success": true}')
+
+
     data = json.loads(request.body)
     #data = json.loads(data)
     print(data)
@@ -226,12 +278,17 @@ def tag(request):
     print(meta_name)
     meta_name = meta_name.name
     print(meta_name)
+    if request.user.username == 'GreatDebugger6':
+        return render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
     #meta_f = Testfilecreate()
     #r = p.rect.rectangles.first()
     meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
     meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
     print(meta_data)
-    f = open(meta_name, 'wt')
+    if request.user.username == 'GreatDebugger7':
+        return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
+    #f = open(meta_name, 'wt')
+    print("ohne explizites open")
     pic.metadata_file.save(meta_name, ContentFile(meta_data))
     #data['id']
     return HttpResponse('{"success": true}')
@@ -304,6 +361,7 @@ def test_creating_metafile2(request):
         meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
         print(meta_data)
         f = open(meta_name, 'wt')
+        print("ohne explizites Open")
         meta_f.metadata_file.save(meta_name, ContentFile(meta_data))
         pic_list.append((p.picture_path_file.url, meta_f.metadata_file.url))
     return render(request, 'download.html', {'pic_list': pic_list})
@@ -323,3 +381,41 @@ def delete_picture_alt(request):
 
     form = PictureDeleteForm()
     return render(request, 'deletepic.html', {'form': form})
+
+@login_required()
+def delete_picture_alt2(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            p.picture_path_file.delete()
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+
+@login_required()
+def delete_picture_debug(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            c = default_storage.__class__
+            adr = p.picture_path_file.storage
+            path = p.picture_path_file.path
+            name = p.picture_path_file.name
+            url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': c, 'adr': adr, 'path': path, 'name': name, 'url': url})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+

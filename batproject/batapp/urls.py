@@ -19,6 +19,8 @@ urlpatterns = [
     path('getall', views.get_all_images, name='getall'),
     path('deletepic', views.delete_picture, name='deletepic'),
     path('download', views.test_creating_metafile, name='download'),
-    path('delete_alt', views.delete_picture_alt, name='delete_alt')
+    path('delete_alt', views.delete_picture_alt, name='delete_alt'),
+    path('delete_alt2', views.delete_picture_alt2, name='delete_alt2'),
+    path('debug', views.delete_picture_debug, name='debug')
 ]
 
