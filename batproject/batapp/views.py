@@ -18,14 +18,14 @@ from .models import Picture, StatusPicture, Muell, Coord, CoordHead, Testfilecre
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('feed')
     else:
         return render(request, 'batapp/index.html')
 
 
 @login_required
-def dashboard(request):
-    return render(request, 'batapp/dashboard.html')
+def feed(request):
+    return render(request, 'batapp/feed.html')
 
 
 

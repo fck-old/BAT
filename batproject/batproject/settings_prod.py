@@ -130,8 +130,8 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'https://storage.googleapis.com/sksys-bat/static/'
 
-LOGOUT_REDIRECT_URL = 'functions'
-LOGIN_REDIRECT_URL = 'functions'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'feed'
 
 # MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
