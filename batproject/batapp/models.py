@@ -16,7 +16,7 @@ class CoordHead(models.Model):
 
 class Picture(models.Model):
     picture_path_file = models.ImageField(upload_to='images/')
-    label = models.CharField(max_length=200, default='add label')
+    label = models.CharField(max_length=200, default='')
     upload_date = models.DateTimeField('date uploaded', null=True)
     status = models.ForeignKey(StatusPicture, related_name='pictures', on_delete=models.CASCADE, null=True)
     uploaded_by = models.ForeignKey(User, related_name='uploaded', on_delete=models.CASCADE, null=True)

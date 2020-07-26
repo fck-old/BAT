@@ -8,6 +8,7 @@ urlpatterns = [
     path('dashboard', views.index, name='dashboard'),
     path('dashboard/feed', views.feed, name='feed'),
     path('dashboard/jobs', views.jobs, name='jobs'),
+    path('dashboard/upload', views.upload_image, name='upload'),
     
     path('dashboard/account', account_views.account, name='account'),
     path('dashboard/account/password', account_views.changePassword, name='changePassword'),
@@ -15,7 +16,6 @@ urlpatterns = [
     path('dashboard/account/delete', account_views.deleteAccount, name='deleteAccount'),
     
     path('help', views.functionality, name='functions'),
-    path('upload', views.upload_image, name='upload'),
     path('getimages', views.get_all_images, name='getimages'),
     path('init', views.initialise_status_types, name='init'),
     path('untagged', views.get_untagged_picture, name='get_untagged'),

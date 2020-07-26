@@ -53,11 +53,11 @@ def upload_image(request):
             #header_ut = StatusPicture.objects.get(status_type='untagged')
             #header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
             #header_ut.save()
-            return HttpResponse('upload successful')
+            return redirect('upload')
 
     form = PictureForm()
     #print("Hallo")
-    return render(request, 'image.html', {'form': form})
+    return render(request, 'batapp/upload.html', {'form': form, 'nav': 'upload'})
 
 
 @login_required
