@@ -319,7 +319,7 @@ def delete_picture(request):
         if form.is_valid():
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
-            print(p.picture_path_file)
+            #print(p.picture_path_file)
             #print(p.picture_path_file.url)
             #print(p.picture_path_file.path)
             default_storage.delete(p.picture_path_file.name)
@@ -346,7 +346,7 @@ def test_creating_metafile(request):
     return render(request, 'download.html', {'pic_list': pic_list})
 
 
-@login_required()
+"""@login_required()
 def test_creating_metafile2(request):
     tagged_id = StatusPicture.objects.get(status_type='tagged')
     pictures = request.user.uploaded.filter(status=tagged_id)
@@ -371,7 +371,7 @@ def test_creating_metafile2(request):
         print("ohne explizites Open")
         meta_f.metadata_file.save(meta_name, ContentFile(meta_data))
         pic_list.append((p.picture_path_file.url, meta_f.metadata_file.url))
-    return render(request, 'download.html', {'pic_list': pic_list})
+    return render(request, 'download.html', {'pic_list': pic_list})"""
 
 @login_required()
 def delete_picture_alt(request):
@@ -417,10 +417,16 @@ def debug_path(request):
             p = Picture.objects.get(id=pic_id)
             #c = default_storage.__class__
             #adr = p.picture_path_file.storage
-            path = p.picture_path_file.path
+            #path = p.picture_path_file.path
             #name = p.picture_path_file.name
             #url = p.picture_path_file.url
-            return render(request, 'info.html', {'c': path})
+            pa = Path(p.picture_path_file.name)
+            print(pa)
+            meta_name = pa.with_suffix('.json')
+            print(meta_name)
+            meta_name = meta_name.name
+            print(meta_name)
+            return render(request, 'info.html', {'c': meta_name})
 
     form = PictureDeleteForm()
     return render(request, 'deletepic.html', {'form': form})
