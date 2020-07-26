@@ -17,11 +17,12 @@
             <div>User ruft die Bilder ab, die er hochgeladen hat und die getagged worden sind (mit Rechteck-Koordinaten und Label): <a href = "{% url 'gettaggeduploadedbyuser' %}"> {% url 'gettaggeduploadedbyuser' %}</a></div>
             <div>User ruft die Bilder ab, die er getagged hat (mit Rechteck-Koordinaten): <a href= "{% url 'getusertaggedimages' %}"> {% url 'getusertaggedimages' %} </a> </div>
             <!-- <div>User taggt Bilder, AJAX Post Request: <a href= "{% url 'tag' %}"> {% url 'tag' %} </a> </div>-->
-            <div>Admin: Datenbank-Einblick und User loeschen: <a href="/admin">/admin</a></div>
-            <div>Admin: Bilder loeschen: <a href="{% url 'deletepic' %}">{% url 'deletepic' %}</a></div>
-            <div>Admin: Bilder loeschen mit url: <a href="{% url 'delete_alt' %}">{% url 'delete_alt' %}</a></div>
+
+            <!-- <div>Admin: Bilder loeschen: <a href="{% url 'deletepic' %}">{% url 'deletepic' %}</a></div>
+            <div>Admin: Bilder loeschen mit url: <a href="{% url 'delete_alt' %}">{% url 'delete_alt' %}</a></div> -->
             <div>Uploader kann getaggte Bilder/Metadaten herunterladen: <a href= "{% url 'download' %}"> {% url 'download' %} </a> </div>
-            <div>Admin: Bilder loeschen  Alt 2: <a href="{% url 'delete_alt2' %}">{% url 'delete_alt2' %}</a></div>
+            <div>Admin: Datenbank-Einblick und User loeschen: <a href="/admin">/admin</a></div>
+            <div>Admin: Bilder loeschen: <a href="{% url 'delete_alt2' %}">{% url 'delete_alt2' %}</a></div>
             <div>Debug-Info name: <a href="{% url 'debugname' %}">{% url 'debugname' %}</a></div>
             <div>Debug-Info path: <a href="{% url 'debugpath' %}">{% url 'debugpath' %}</a></div>
             <div>Debug-Info url: <a href="{% url 'debugurl' %}">{% url 'debugurl' %}</a></div>

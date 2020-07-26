@@ -206,7 +206,7 @@ def tag(request):
     #data_un = request.body
     #print(request.body)
     #data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
-    if request.user.is_superuser or request.user.username == 'GreatDebugger1' or request.user.username == 'GreatDebugger2' \
+    """if request.user.is_superuser or request.user.username == 'GreatDebugger1' or request.user.username == 'GreatDebugger2' \
             or request.user.username == 'GreatDebugger3' or request.user.username == 'GreatDebugger4' or request.user.username == 'GreatDebugger5':
         data = json.loads(request.body)
         # data = json.loads(data)
@@ -256,7 +256,7 @@ def tag(request):
         ff.close()
         default_storage.delete(pathfile)
         # data['id']
-        return HttpResponse('{"success": true}')
+        return HttpResponse('{"success": true}')"""
 
 
     data = json.loads(request.body)
@@ -273,26 +273,27 @@ def tag(request):
     pic.save()
     request.user.last_picture = -1
     request.user.save()
-    print('Datenbankeintrag path:')
+    """print('Datenbankeintrag path:')
     print(pic.picture_path_file.path)
     #print('mit Attribut name:')
     #print(pic.picture_path_file.url)
     pa = Path(pic.picture_path_file.path)
     print('nach Anwendung von Python Path auf path:')
-    print(pa)
-    meta_name = pa.with_suffix('.json')
+    print(pa)"""
+    print("neuer Filename:")
+    meta_name = 'metafile_' + str(pic.id) + '.json'
     print(meta_name)
-    meta_name = meta_name.name
-    print(meta_name)
-    if request.user.username == 'GreatDebugger6':
-        return render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
+    #meta_name = meta_name.name
+    #print(meta_name)
+    #if request.user.username == 'GreatDebugger6':
+        # render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
     #meta_f = Testfilecreate()
     #r = p.rect.rectangles.first()
     meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
     meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
     print(meta_data)
-    if request.user.username == 'GreatDebugger7':
-        return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
+    #if request.user.username == 'GreatDebugger7':
+        #return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
     #f = open(meta_name, 'wt')
     print("ohne explizites open")
     pic.metadata_file.save(meta_name, ContentFile(meta_data))
@@ -453,6 +454,7 @@ def debug_url(request):
         if form.is_valid():
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
+            #print(p.id[id])
             #c = default_storage.__class__
             #adr = p.picture_path_file.storage
             url = p.picture_path_file.url
