@@ -18,15 +18,18 @@ from .models import Picture, StatusPicture, Muell, Coord, CoordHead, Testfilecre
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('feed')
     else:
         return render(request, 'batapp/index.html')
 
 
 @login_required
-def dashboard(request):
-    return render(request, 'batapp/dashboard.html')
+def feed(request):
+    return render(request, 'batapp/feed.html', {'nav': 'feed'})
 
+@login_required
+def jobs(request):
+    return render(request, 'batapp/jobs.html', {'nav': 'jobs'})
 
 
 @login_required
@@ -50,11 +53,11 @@ def upload_image(request):
             #header_ut = StatusPicture.objects.get(status_type='untagged')
             #header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
             #header_ut.save()
-            return HttpResponse('upload successful')
+            return redirect('upload')
 
     form = PictureForm()
     #print("Hallo")
-    return render(request, 'image.html', {'form': form})
+    return render(request, 'batapp/upload.html', {'form': form, 'nav': 'upload'})
 
 
 @login_required

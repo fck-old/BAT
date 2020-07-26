@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-from google.oauth2 import service_account
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,9 +23,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '8wysz-i5@^d_f%beglc6u0cl^b!g3+e3t357)3yxu1=a9+r$!l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,21 +77,10 @@ WSGI_APPLICATION = 'batproject.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-#DATABASES['default']['HOST'] = '/cloudsql/sksys-bat:europe-west3:sksys-bat-instance'
-#if os.getenv('GAE_INSTANCE'):
-#    pass
-#else:
-#    DATABASES['default']['HOST'] = '127.0.0.1'
-
 
 
 # Password validation
@@ -132,28 +119,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-### switch between static/media url for testing 
+STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATIC_URL = '/static/'
-STATIC_URL = 'https://storage.googleapis.com/sksys-bat/static/'
-
-LOGOUT_REDIRECT_URL = 'functions'
-LOGIN_REDIRECT_URL = 'functions'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_REDIRECT_URL = 'feed'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-#MEDIA_URL = '/media/'
-MEDIA_URL = 'https://storage.googleapis.com/sksys-bat/media/'
+MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accountapp.User'
 
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
-
-
-#GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
-#    "docker/media_sksys-bat-7a5cdc1a851f.json"
-#)
-
-#DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
-#GS_BUCKET_NAME = 'bat-media'
-#GS_PROJECT_ID = 'sksys-bat'

@@ -1,0 +1,28 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - Profile</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/account.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/account.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <div class="container">
+    <h2>Change User Settings</h2>
+    <form class="form-change" method="post" novalidate>
+      {% csrf_token %}
+      {% for field in form %}
+          {{field}}
+      {% endfor %}
+      <button type="submit" class="btn btn-primary">Change Profile</button>
+      <a class="btn btn-warning" href="{% url 'account' %}" role="button">Back</a>
+    </form>
+  </div>
+{% endblock %}

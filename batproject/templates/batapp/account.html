@@ -1,0 +1,46 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - Account</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/account.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/account.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <div class="container">
+  <h2>Your user infos</h2>
+
+    <form class="form-change" method="post" novalidate>
+      <table class="table table-light table-borderless">
+        <tbody>
+          <tr>
+            <th scope="row">Username:</th>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <th scope="row">First Name:</th>
+            <td>{{user.first_name}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Last Name:</th>
+            <td>{{user.last_name}}</td>
+          </tr>
+          <tr>
+            <th scope="row">Email:</th>
+            <td>{{ user.email }}</td>
+          </tr>
+      </table>
+    </form>
+  </div>
+
+  <a class="btn btn-primary" href="{% url 'changeProfile' %}" role="button">Change Profile</a>
+  <a class="btn btn-primary" href="{% url 'changePassword' %}" role="button">Change Password</a>
+  <a class="btn btn-danger" href="{% url 'deleteAccount' %}" role="button">Delete Account</a>
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - Feed</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/feed.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/feed.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
+    <h1 class="h2">Tag: <span id="totag">Loading...</span></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        
+        <span id="is-not-tagged-button-array">
+          <button type="button" id="skip" class="btn btn-sm btn-outline-secondary">Skip image</button>
+        </span>
+        <span id="is-tagged-button-array" class="d-none">
+          <button type="button" id="tag-reset" class="btn btn-sm btn-danger">Reset</button>
+          <button type="button" id="tag-save" class="btn btn-sm btn-success">Save</button>
+        </span>
+        
+      </div>
+    </div>
+  </div>
+  
+  <!-- CANVAS -->
+  <div id="todo-buttons">
+    <button id="b1" class="btn btn-dark">Bild 1</button>
+    <button id="b2" class="btn btn-dark">Bild 2</button>
+    
+    <button id="plus" class="btn btn-dark">+</button>
+    <button id="minus" class="btn btn-dark">-</button>
+    <button id="reset" class="btn btn-dark">Reset</button>
+    
+    <button id="up" class="btn btn-dark">Up</button>
+    <button id="left" class="btn btn-dark">Left</button>
+    <button id="down" class="btn btn-dark">Down</button>
+    <button id="right" class="btn btn-dark">Right</button>
+  </div>
+  
+  <div id="container" class="empty">
+    <div id="translation">
+      <img id="image" src="" alt="">
+      <div id="tagcontainer">
+        <div id="tag"></div>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <div id="loading">
+      Loading...
+    </div>
+  </div>
+  <!-- END: CANVAS -->
+{% endblock %}

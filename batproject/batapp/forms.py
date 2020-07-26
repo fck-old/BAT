@@ -7,6 +7,7 @@ class PictureForm(forms.ModelForm):
     class Meta:
         model = Picture
         fields = ['picture_path_file', 'label']
+        widget = forms.TextInput(attrs={'placeholder': 'Search'})
 
 
 class PictureDeleteForm(forms.Form):

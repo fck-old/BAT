@@ -1,0 +1,37 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - My Jobs</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/jobs.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/jobs.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <div id="main-headline" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
+    <h1 class="h2">My Jobs</span></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        
+        <span>
+          <a id="new" class="btn btn-sm btn-success" href="{% url 'upload' %}">Upload</a>
+        </span>
+        <span id="is-tagged-button-array" class="d-none">
+          <button type="button" id="tag-reset" class="btn btn-sm btn-danger">Reset</button>
+          <button type="button" id="tag-save" class="btn btn-sm btn-success">Save</button>
+        </span>
+        
+      </div>
+    </div>
+  </div>
+  
+  <div id="image-container">
+    <!-- Will be populated via JS -->
+  </div>
+{% endblock %}

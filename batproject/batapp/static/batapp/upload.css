@@ -1,0 +1,68 @@
+html, body {
+  height: 100%;
+}
+
+form {
+  height: 100%;
+}
+
+#label input {
+  background-color: transparent;
+  color: #f7b500;
+  border: 1px solid white;
+  transform: translate(0, 2px);
+  margin-left: 5px;
+  margin-top: -10px;
+  margin-bottom: -5px;
+  padding: 4px;
+}
+
+#label input:focus {
+  border: 1px solid #f7b500;
+  outline: none;
+}
+
+#reset, #reset:focus {
+  box-shadow: none;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+
+#save, #save:focus {
+  box-shadow: none;
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+/* IMAGE */
+#container {
+  border-top: 1px solid #ebebeb;
+  width: 100%;
+  height: calc(100% - 70px);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  #container {
+    height: calc(100% - 95px);
+    border: 1px solid #ebebeb;
+  }
+}
+
+#image {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  max-height: 100%;
+  max-width: 100%;
+}
+
+#file-container {
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
