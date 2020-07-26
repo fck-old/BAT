@@ -1,3 +1,7 @@
+html, body {
+  height: 100%;
+}
+
 #totag {
   color: #f7b500;
 }

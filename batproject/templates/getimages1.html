@@ -1,12 +1,20 @@
-{% extends 'base.html' %}
-
-    {% block content %}
+{
+    "images": [
         {% for p in pictures %}
-            <div class="col-md-4">
-                <img src= "{{p.picture_path_file.url}}" class="image-responsive" style="width: 100%; float: left; margin-right: 10px;" />
-            </div>
-            <div>
-                {{p.label}}
-            </div>
+        {
+            "url": "{{p.picture_path_file.url|safe}}",
+            "label": "{{p.label}}",
+            {% ifnotequal p.tagged_by|stringformat:"s" "None" %}
+                "tagged": true
+            {% else %}
+                "tagged": false
+            {% endifnotequal %}
+        }
+        
+        {% if not forloop.last %}
+            ,
+        {% endif %}
+        
         {% endfor %}
-    {% endblock %}
+    ]
+}

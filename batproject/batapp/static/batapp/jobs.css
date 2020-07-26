@@ -1,0 +1,49 @@
+#main-headline {
+    border-bottom: 1px solid #ebebeb;
+}
+
+#new:focus {
+    box-shadow: none;
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+#new:active {
+    color: #fff;
+    background-color: #1e7e34;
+    border-color: #1c7430;
+}
+
+#image-container {
+    display: flex;
+    flex-flow: row wrap;
+    margin-top: 10px;
+    margin-bottom: 30px;
+    justify-content: space-evenly;
+}
+
+.image {
+    margin: 20px;
+    border: 3px solid #333333;
+}
+
+.image.tagged {
+    border: 3px solid #59b118;
+}
+
+.image img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+}
+
+.image .label {
+    width: 200px;
+    text-align: center;
+    border-top: 1px solid #444444;
+}
+
+.image.tagged .label {
+    border-top: 1px solid #59b118;
+    background-color: #1c3808
+}

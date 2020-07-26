@@ -27,6 +27,9 @@ def index(request):
 def feed(request):
     return render(request, 'batapp/feed.html', {'nav': 'feed'})
 
+@login_required
+def jobs(request):
+    return render(request, 'batapp/jobs.html', {'nav': 'jobs'})
 
 
 @login_required
