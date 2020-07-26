@@ -223,7 +223,7 @@ def tag(request):
         pic.save()
         request.user.last_picture = -1
         request.user.save()
-        pa = Path(pic.picture_path_file.name)
+        pa = Path(pic.picture_path_file.path)
         print(pa)
         if request.user.username == 'GreatDebugger1':
             return render(request, 'answer.html', {'s': 'erstes Python Path Kommando erfolgreich ausgefuehrt'})
@@ -254,6 +254,7 @@ def tag(request):
         print("mit explizitem open")
         pic.metadata_file.save(meta_name, ff)
         ff.close()
+        default_storage.delete(pathfile)
         # data['id']
         return HttpResponse('{"success": true}')
 
@@ -272,7 +273,12 @@ def tag(request):
     pic.save()
     request.user.last_picture = -1
     request.user.save()
-    pa = Path(pic.picture_path_file.name)
+    print('Datenbankeintrag path:')
+    print(pic.picture_path_file.path)
+    #print('mit Attribut name:')
+    #print(pic.picture_path_file.url)
+    pa = Path(pic.picture_path_file.path)
+    print('nach Anwendung von Python Path auf path:')
     print(pa)
     meta_name = pa.with_suffix('.json')
     print(meta_name)
@@ -312,9 +318,9 @@ def delete_picture(request):
         if form.is_valid():
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
-            print(p.picture_path_file.name)
-            print(p.picture_path_file.url)
-            print(p.picture_path_file.path)
+            print(p.picture_path_file)
+            #print(p.picture_path_file.url)
+            #print(p.picture_path_file.path)
             default_storage.delete(p.picture_path_file.name)
             p.delete()
             return HttpResponse('Delete successful')
@@ -400,22 +406,60 @@ def delete_picture_alt2(request):
 
 
 @login_required()
-def delete_picture_debug(request):
-    if not request.user.is_superuser:
-        return HttpResponse("Access denied. No Admin rights.")
+def debug_path(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
     if request.method == 'POST':
         form = PictureDeleteForm(request.POST)
         if form.is_valid():
             pic_id = form.cleaned_data['pic_id']
             p = Picture.objects.get(id=pic_id)
-            c = default_storage.__class__
-            adr = p.picture_path_file.storage
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
             path = p.picture_path_file.path
-            name = p.picture_path_file.name
-            url = p.picture_path_file.url
-            return render(request, 'info.html', {'c': c, 'adr': adr, 'path': path, 'name': name, 'url': url})
+            #name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': path})
 
     form = PictureDeleteForm()
     return render(request, 'deletepic.html', {'form': form})
 
+
+@login_required()
+def debug_name(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
+            #path = p.picture_path_file.path
+            name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': name})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+@login_required()
+def debug_url(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
+            url = p.picture_path_file.url
+            #name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': url})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
 
