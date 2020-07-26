@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // Globals
-    var isPortrait = false; // portrait image => width is set to 100%, otherwise height 100%
+    var clipToMaxHeight = true;
     var zoom = 100; // in percent
     var translationX = 0; // in pixel
     var translationY = 0; // in pixel
@@ -72,11 +72,20 @@ $(document).ready(function() {
     
     // Redraw function
     function redraw() {
+        var imgRatio = $image[0].naturalWidth / $image[0].naturalHeight;
+        var containerRatio = $container.width() / $container.height();
+        
+        if (imgRatio > containerRatio) {
+            clipToMaxHeight = false;
+        } else {
+            clipToMaxHeight = true;
+        }
+        
         // Translate
         $trans.css("transform", "translate(" + translationX + "px, " + translationY + "px)");
         
         // Zoom
-        if (isPortrait) {
+        if (!clipToMaxHeight) {
             $image.css("width", zoom + "%");
             $image.css("height", "auto");
         } else {
@@ -132,12 +141,6 @@ $(document).ready(function() {
     $image.bind("load", function() {
         $canvas[0].width = $image[0].naturalWidth;
         $canvas[0].height = $image[0].naturalHeight;
-        
-        if ($image[0].naturalWidth > $image[0].naturalHeight) {
-            isPortrait = true;
-        } else {
-            isPortrait = false;
-        }
         
         redraw();
         $container.removeClass("empty");
