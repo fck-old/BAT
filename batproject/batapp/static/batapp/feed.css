@@ -84,3 +84,7 @@ html, body {
 .empty #loading {
   visibility: visible;
 }
+
+#skip:focus {
+  box-shadow: none;
+}
