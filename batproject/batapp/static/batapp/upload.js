@@ -28,5 +28,7 @@ $(document).ready(function() {
             // fallback -- perhaps submit the input to an iframe and temporarily store
             // them on the server until the user's session ends.
         }
+        
+        $("#id_label").focus();
     }
 });
