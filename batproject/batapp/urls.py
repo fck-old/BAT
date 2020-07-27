@@ -16,6 +16,10 @@ urlpatterns = [
     path('dashboard/account/profile', account_views.changeProfile, name='changeProfile'),
     path('dashboard/account/delete', account_views.deleteAccount, name='deleteAccount'),
     
+    path('download', views.download, name='download'),
+    
+    
+    
     path('help', views.functionality, name='functions'),
     path('getimages', views.get_all_images, name='getimages'),
     path('init', views.initialise_status_types, name='init'),
@@ -27,7 +31,7 @@ urlpatterns = [
     path('tag', views.tag, name='tag'),
     path('getall', views.get_all_images, name='getall'),
     path('deletepic', views.delete_picture, name='deletepic'),
-    path('download', views.test_creating_metafile, name='download'),
+    path('download_old', views.test_creating_metafile, name='download_old'),
     path('delete_alt', views.delete_picture_alt, name='delete_alt'),
     path('delete_alt2', views.delete_picture_alt2, name='delete_alt2'),
     path('debugname', views.debug_name, name='debugname'),

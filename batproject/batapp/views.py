@@ -44,6 +44,26 @@ def job_details(request, id):
     
     return render(request, 'batapp/job_details.html', {'nav': 'jobs', 'picture': picture, 'rect': rect, 'tagged': tagged})
 
+
+@login_required
+def download(request):
+    
+    pictures = Picture.objects.filter(uploaded_by=request.user)
+    
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    
+    response = render(request, 'batapp/download.html', {'pic_list': pic_list, 'user': request.user})
+    
+    # Makes the browser download it as a file
+    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Disposition'] = 'attachment; filename="tags.json"'
+    
+    return response
+
+
 @login_required
 def upload_image(request):
 
