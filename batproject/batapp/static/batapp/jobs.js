@@ -5,10 +5,12 @@ $(document).ready(function() {
         data = JSON.parse(data);
         data.images.forEach(function(image) {
             $imageContainer.append(
-                '<div class="image' + (image.tagged == true ? " tagged" : "") + '">\
-                    <img src="' + image.url + '" alt="">\
-                    <div class="label">' + image.label +'</div>\
-                </div>');
+                '<a href="/dashboard/jobs/' + image.id + '" class="image-link">\
+                    <div class="image' + (image.tagged == true ? " tagged" : "") + '">\
+                        <img src="' + image.url + '" alt="">\
+                        <div class="label">[' + image.id + '] ' + image.label +'</div>\
+                    </div>\
+                </a>');
         });
         
         window.data = data;

@@ -47,3 +47,8 @@
     border-top: 1px solid #59b118;
     background-color: #1c3808
 }
+
+.image-link, .image-link:hover {
+    color: white;
+    text-decoration: none;
+}
