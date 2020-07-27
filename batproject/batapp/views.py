@@ -31,6 +31,18 @@ def feed(request):
 def jobs(request):
     return render(request, 'batapp/jobs.html', {'nav': 'jobs'})
 
+@login_required
+def job_details(request, id):
+    picture = Picture.objects.get(id=id)
+    rect = picture.rect.rectangles.first()
+    tagged = "false"
+    if rect is None:
+        rect = {"x": 0, "y": 0, "width": 0, "height": 0}
+        tagged = "false"
+    else:
+        tagged = "true"
+    
+    return render(request, 'batapp/job_details.html', {'nav': 'jobs', 'picture': picture, 'rect': rect, 'tagged': tagged})
 
 @login_required
 def upload_image(request):

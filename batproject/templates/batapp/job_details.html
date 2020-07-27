@@ -1,0 +1,53 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - Details</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/job_details.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script>
+    window.data = {
+        "id": {{picture.id}},
+        "label": "{{picture.label}}",
+        "url": "{{picture.picture_path_file.url}}",
+        "x": {{rect.x}},
+        "y": {{rect.y}},
+        "width": {{rect.width}},
+        "height": {{rect.height}},
+        "tagged": {{tagged}}
+    };
+  </script>
+  <script src="{% static 'batapp/job_details.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
+    <h1 class="h2"><span id="img-id">[0]</span> <span id="totag">Loading...</span></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="mr-2">
+        <a id="back-button" class="btn btn-sm btn-info" href="{% url 'jobs' %}">Back</a>
+        <button type="button" id="tag-delete" class="btn btn-sm btn-danger" disabled>Delete Tag</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- CANVAS -->
+  <div id="container" class="empty">
+    <div id="translation">
+      <img id="image" src="" alt="">
+      <div id="tagcontainer">
+        <div id="tag"></div>
+      </div>
+      <canvas id="canvas"></canvas>
+    </div>
+    <div id="loading">
+      Loading...
+    </div>
+  </div>
+  <!-- END: CANVAS -->
+{% endblock %}

@@ -8,6 +8,7 @@ urlpatterns = [
     path('dashboard', views.index, name='dashboard'),
     path('dashboard/feed', views.feed, name='feed'),
     path('dashboard/jobs', views.jobs, name='jobs'),
+    path('dashboard/jobs/<int:id>', views.job_details, name='jobs'),
     path('dashboard/upload', views.upload_image, name='upload'),
     
     path('dashboard/account', account_views.account, name='account'),

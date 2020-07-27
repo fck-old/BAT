@@ -9,8 +9,21 @@ $(document).ready(function() {
                     <div class="image' + (image.tagged == true ? " tagged" : "") + '">\
                         <img src="' + image.url + '" alt="">\
                         <div class="label">[' + image.id + '] ' + image.label +'</div>\
+                        <div id="delete-img-' + image.id + '" class="delete-img-button">X</div>\
                     </div>\
                 </a>');
+            
+            $("#delete-img-" + image.id).click(function(event) {
+                event.stopPropagation();
+                event.preventDefault();
+                
+                
+                if (confirm("Are you sure?")) {
+                    alert("not yet implemented...");
+                }
+                
+                
+            });
         });
         
         window.data = data;
