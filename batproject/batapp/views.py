@@ -243,11 +243,12 @@ def tag(request):
         meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']),
                      'height': int(data['height'])}
         if request.user.username == 'GreatDebugger2':
-            meta_data = json.dumps(meta_data)
+            meta_data = 'einechterString'
         else:
             meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
-        print(meta_data)
-        print("ohne explizites open")
+            meta_name = 'testf.txt'
+        #print(meta_data)
+        #print("ohne explizites open")
         pic.metadata_file.save(meta_name, ContentFile(meta_data))
         # data['id']
         return HttpResponse('{"success": true}')
@@ -273,9 +274,9 @@ def tag(request):
     pa = Path(pic.picture_path_file.path)
     print('nach Anwendung von Python Path auf path:')
     print(pa)"""
-    print("neuer Filename:")
+    #print("neuer Filename:")
     meta_name = 'metafile_' + str(pic.id) + '.json'
-    print(meta_name)
+    #print(meta_name)
     #meta_name = meta_name.name
     #print(meta_name)
     #if request.user.username == 'GreatDebugger6':
@@ -284,11 +285,11 @@ def tag(request):
     #r = p.rect.rectangles.first()
     meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
     meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
-    print(meta_data)
+    #print(meta_data)
     #if request.user.username == 'GreatDebugger7':
         #return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
     #f = open(meta_name, 'wt')
-    print("ohne explizites open")
+    #print("ohne explizites open")
     pic.metadata_file.save(meta_name, ContentFile(meta_data))
     #data['id']
     return HttpResponse('{"success": true}')
