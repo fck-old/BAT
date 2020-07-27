@@ -58,7 +58,7 @@ def download(request):
     response = render(request, 'batapp/download.html', {'pic_list': pic_list, 'user': request.user})
     
     # Makes the browser download it as a file
-    response['Content-Type'] = 'application/octet-stream'
+    response['Content-Type'] = 'application/octet-stream; charset=utf-8'
     response['Content-Disposition'] = 'attachment; filename="tags.json"'
     
     return response
@@ -269,7 +269,13 @@ def tag(request):
             meta_name = 'testf.txt'
         #print(meta_data)
         #print("ohne explizites open")
-        pic.metadata_file.save(meta_name, ContentFile(meta_data))
+        
+        
+        # QUICK FIX FROM FRONTEND
+        #pic.metadata_file.save(meta_name, ContentFile(meta_data))
+        
+        
+        
         # data['id']
         return HttpResponse('{"success": true}')
 

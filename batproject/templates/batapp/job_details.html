@@ -14,7 +14,7 @@
     window.data = {
         "id": {{picture.id}},
         "label": "{{picture.label}}",
-        "url": "{{picture.picture_path_file.url}}",
+        "url": "{{picture.picture_path_file.url|safe}}",
         "x": {{rect.x}},
         "y": {{rect.y}},
         "width": {{rect.width}},
