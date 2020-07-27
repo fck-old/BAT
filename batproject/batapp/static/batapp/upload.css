@@ -66,3 +66,22 @@ form {
   top: 50%;
   left: 50%;
 }
+
+
+
+
+
+
+
+/* dirty */
+h1 {
+  width: calc(100% - 150px);
+}
+
+#label {
+  
+}
+
+#label input {
+  width: calc(100% - 80px);
+}
