@@ -239,6 +239,9 @@ def get_untagged_picture(request):
             # untagged_p.save()
             return render(request, 'getimage.html', {'p': new_pic})
 
+        if new_pic is None and request.user.last_picture > -1:
+            return render(request, 'getimage.html', {'p': last_pic})
+        
         request.user.last_picture = -1
         request.user.save()
         last_pic.status = untagged_p
