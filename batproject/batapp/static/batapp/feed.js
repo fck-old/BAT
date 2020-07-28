@@ -485,6 +485,11 @@ $(document).ready(function() {
     
     var currentImageData;
     function getImage() {
+        
+        $("#totag").text("Loading...");
+        $("#loading").text("Loading...");
+        
+        
         $.get("/untagged", function(data) {
             currentImageData = JSON.parse(data);
             
@@ -492,9 +497,9 @@ $(document).ready(function() {
                 loadImage(currentImageData.url);
                 $("#totag").text(currentImageData.label);
             } else {
-                setTimeout(function() {
-                    getImage();
-                }, 200);
+                loadImage("");
+                $("#totag").text("...");
+                $("#loading").text("Inbox zero :)");
             }
             
         });
