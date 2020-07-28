@@ -199,6 +199,8 @@ def get_untagged_picture(request):
         untagged_p = StatusPicture.objects.get(status_type='untagged')
         in_progress_p = StatusPicture.objects.get(status_type='in_progress')
         pic = untagged_p.pictures.order_by('upload_date').first()
+        if pic is None:
+            return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
         pic.status = in_progress_p
         pic.save()
         request.user.last_picture = pic.id
@@ -224,6 +226,19 @@ def get_untagged_picture(request):
             #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
             #untagged_p.save()
             return render(request, 'getimage.html', {'p': new_pic})
+
+        new_pic = untagged_p.pictures.order_by('upload_date').first()
+        if new_pic is not None:
+            new_pic.status = in_progress_p
+            new_pic.save()
+            request.user.last_picture = new_pic.id
+            request.user.save()
+            last_pic.status = untagged_p
+            last_pic.save()
+            # untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
+            # untagged_p.save()
+            return render(request, 'getimage.html', {'p': new_pic})
+
         request.user.last_picture = -1
         request.user.save()
         last_pic.status = untagged_p
