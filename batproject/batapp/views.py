@@ -237,48 +237,7 @@ def get_untagged_picture(request):
 @login_required()
 @csrf_exempt
 def tag(request):
-    #data_un = request.POST
-    #data_un = request.body
-    #print(request.body)
-    #data = "{\"x\":\"18\",\"y\":\"43\", \"width\":\"178\", \"height\":\"2218\"}"
-    if request.user.is_superuser or request.user.username == 'GreatDebugger1' or request.user.username == 'GreatDebugger2':
-        data = json.loads(request.body)
-        # data = json.loads(data)
-        print(data)
-        tagged_p = StatusPicture.objects.get(status_type='tagged')
-        in_progress_p = StatusPicture.objects.get(status_type='in_progress')
-        pic = in_progress_p.pictures.get(id=request.user.last_picture)
-        print("Header Id:")
-        print(pic.rect.id)
-        Coord.objects.create(x=int(data['x']), y=int(data['y']), width=int(data['width']), height=int(data['height']),
-                             belongs_to_pic=pic.rect)
-        pic.status = tagged_p
-        pic.tagged_by = request.user
-        pic.save()
-        request.user.last_picture = -1
-        request.user.save()
-        pa = Path(pic.picture_path_file.name)
-        meta_name = pa.with_suffix('.json')
-        meta_name = meta_name.name
-        meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']),
-                     'height': int(data['height'])}
-        if request.user.username == 'GreatDebugger2':
-            meta_data = 'einechterString'
-        else:
-            meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
-            meta_name = 'testf.txt'
-        #print(meta_data)
-        #print("ohne explizites open")
-        
-        
-        # QUICK FIX FROM FRONTEND
-        #pic.metadata_file.save(meta_name, ContentFile(meta_data))
-        
-        
-        
-        # data['id']
-        return HttpResponse('{"success": true}')
-
+                
     data = json.loads(request.body)
     #data = json.loads(data)
     print(data)
@@ -301,7 +260,7 @@ def tag(request):
     print('nach Anwendung von Python Path auf path:')
     print(pa)"""
     #print("neuer Filename:")
-    meta_name = 'metafile_' + str(pic.id) + '.json'
+    #meta_name = 'metafile_' + str(pic.id) + '.json'
     #print(meta_name)
     #meta_name = meta_name.name
     #print(meta_name)
@@ -309,14 +268,14 @@ def tag(request):
         # render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
     #meta_f = Testfilecreate()
     #r = p.rect.rectangles.first()
-    meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
-    meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+    #meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
+    #meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
     #print(meta_data)
     #if request.user.username == 'GreatDebugger7':
         #return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
     #f = open(meta_name, 'wt')
     #print("ohne explizites open")
-    pic.metadata_file.save(meta_name, ContentFile(meta_data))
+    #pic.metadata_file.save(meta_name, ContentFile(meta_data))
     #data['id']
     return HttpResponse('{"success": true}')
     #return HttpResponse('Saving successful')
