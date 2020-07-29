@@ -296,6 +296,7 @@ $(document).ready(function() {
         $("#img-id").text("[" + data.id + "] ");
         $("#totag").text(data.label);
         
+        loadImage(data.url);
         if (data.tagged) {
             $("#tag-delete").attr("disabled", false);
             coords.start.x = data.x;
@@ -303,8 +304,6 @@ $(document).ready(function() {
             coords.stop.x = data.x + data.width;
             coords.stop.y = data.y + data.height;
         }
-        
-        loadImage(data.url);
     }
     
     load();
