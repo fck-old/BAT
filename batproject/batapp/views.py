@@ -1,6 +1,9 @@
 import json
+from pathlib import Path
 
 from django.contrib.auth.decorators import login_required
+from django.core.files.base import ContentFile, File
+from django.core.files.storage import default_storage
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
@@ -9,21 +12,56 @@ from django.template import loader
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from batapp.forms import PictureForm
-from .models import Picture, StatusPicture, Muell, Coord, CoordHead
+from batapp.forms import PictureForm, PictureDeleteForm
+from .models import Picture, StatusPicture, Muell, Coord, CoordHead, Testfilecreate
 
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('dashboard')
+        return redirect('feed')
     else:
         return render(request, 'batapp/index.html')
 
 
 @login_required
-def dashboard(request):
-    return render(request, 'batapp/dashboard.html')
+def feed(request):
+    return render(request, 'batapp/feed.html', {'nav': 'feed'})
 
+@login_required
+def jobs(request):
+    return render(request, 'batapp/jobs.html', {'nav': 'jobs'})
+
+@login_required
+def job_details(request, id):
+    picture = Picture.objects.get(id=id)
+    rect = picture.rect.rectangles.first()
+    tagged = "false"
+    if rect is None:
+        rect = {"x": 0, "y": 0, "width": 0, "height": 0}
+        tagged = "false"
+    else:
+        tagged = "true"
+    
+    return render(request, 'batapp/job_details.html', {'nav': 'jobs', 'picture': picture, 'rect': rect, 'tagged': tagged})
+
+
+@login_required
+def download(request):
+    
+    pictures = Picture.objects.filter(uploaded_by=request.user)
+    
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    
+    response = render(request, 'batapp/download.html', {'pic_list': pic_list, 'user': request.user})
+    
+    # Makes the browser download it as a file
+    response['Content-Type'] = 'application/octet-stream; charset=utf-8'
+    response['Content-Disposition'] = 'attachment; filename="tags.json"'
+    
+    return response
 
 
 @login_required
@@ -47,11 +85,11 @@ def upload_image(request):
             #header_ut = StatusPicture.objects.get(status_type='untagged')
             #header_ut.pictures.set(header_ut.pictures.order_by('-upload_date'))
             #header_ut.save()
-            return HttpResponse('upload successful')
+            return redirect('upload')
 
     form = PictureForm()
     #print("Hallo")
-    return render(request, 'image.html', {'form': form})
+    return render(request, 'batapp/upload.html', {'form': form, 'nav': 'upload'})
 
 
 @login_required
@@ -66,7 +104,7 @@ def get_all_images(request):
         # p.picture_path_file = 'http://127.0.0.1:8000/batapp' + p.picture_path_file.url # hier geaendert
         # print('Das wird zusammengefuegt:')
         # print('http://127.0.0.1:8000/batapp' + ([str)p.picture_path_file)  # hier geaendert
-    return render(request, 'getimages.html', {'pictures': pictures})
+    return render(request, 'getimages1.html', {'pictures': pictures})
 
 
 @login_required()
@@ -74,17 +112,64 @@ def get_images_uploaded_by_user(request):
 
     pictures = Picture.objects.filter(uploaded_by=request.user)
 
-    return render(request, 'getimages.html', {'pictures': pictures})
-
+    return render(request, 'getimages1.html', {'pictures': pictures})
 
 @login_required()
 def get_images_tagged_by_user(request):
 
-    pictures = Picture.objects.filter(tagged_by=request.user)
+    #tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.tagged.all()
+    #tagged_p.pictures.filter(tagged_by=request.user)
     if pictures.first() is None:
         return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
 
-    return render(request, 'getimages.html', {'pictures': pictures})
+@login_required()
+def get_images_tagged_by_user1(request):
+
+    tagged_p = StatusPicture.objects.get(status_type='tagged')
+    pictures = tagged_p.pictures.filter(tagged_by=request.user)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
+
+@login_required()
+def get_tagged_images_uploaded_by_user(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        rec_list = p.rect.rectangles.all()
+        pic_list.append((p, rec_list))
+    return render(request, 'getimages.html', {'pic_list': pic_list})
+
+
+@login_required()
+def get_tagged_images_uploaded_by_user_json(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        #rec_list = p.rect.rectangles.all()
+        #r = rec_list.first()
+        r = p.rect.rectangles.first()
+        meta_data = {'label': p.label, 'x': r.x, 'y': r.y, 'width': r.width, 'height': r.height}
+        meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+        print(meta_data)
+        pic_list.append((p.picture_path_file.url, meta_data))
+    return render(request, 'getimages2.html', {'pic_list': pic_list})
 
 
 def functionality(request):
@@ -114,6 +199,8 @@ def get_untagged_picture(request):
         untagged_p = StatusPicture.objects.get(status_type='untagged')
         in_progress_p = StatusPicture.objects.get(status_type='in_progress')
         pic = untagged_p.pictures.order_by('upload_date').first()
+        if pic is None:
+            return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
         pic.status = in_progress_p
         pic.save()
         request.user.last_picture = pic.id
@@ -139,6 +226,22 @@ def get_untagged_picture(request):
             #untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
             #untagged_p.save()
             return render(request, 'getimage.html', {'p': new_pic})
+
+        new_pic = untagged_p.pictures.order_by('upload_date').first()
+        if new_pic is not None:
+            new_pic.status = in_progress_p
+            new_pic.save()
+            request.user.last_picture = new_pic.id
+            request.user.save()
+            last_pic.status = untagged_p
+            last_pic.save()
+            # untagged_p.pictures = untagged_p.pictures.order_by('-upload_date')
+            # untagged_p.save()
+            return render(request, 'getimage.html', {'p': new_pic})
+
+        if new_pic is None and request.user.last_picture > -1:
+            return render(request, 'getimage.html', {'p': last_pic})
+        
         request.user.last_picture = -1
         request.user.save()
         last_pic.status = untagged_p
@@ -150,23 +253,218 @@ def get_untagged_picture(request):
         return HttpResponse('{"id": -1, "url": "", "label": "", "image": false}')
 
 @login_required()
-def save_rectangle(request):
-    data = request.POST
-    #data = json.loads(data_un)
-    Coord.objects.create(x=data['x'], y=data['y'], width=data['width'], height=data['height'], belongs_to_pic=request.user.last_picture.rect)
-    in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+@csrf_exempt
+def tag(request):
+                
+    data = json.loads(request.body)
+    #data = json.loads(data)
+    print(data)
     tagged_p = StatusPicture.objects.get(status_type='tagged')
-    pic = in_progress_p.pictures.filter(id=request.user.last_picture)
+    in_progress_p = StatusPicture.objects.get(status_type='in_progress')
+    pic = in_progress_p.pictures.get(id=request.user.last_picture)
+    print("Header Id:")
+    print(pic.rect.id)
+    Coord.objects.create(x=int(data['x']), y=int(data['y']), width=int(data['width']), height=int(data['height']), belongs_to_pic=pic.rect)
     pic.status = tagged_p
     pic.tagged_by = request.user
+    pic.save()
     request.user.last_picture = -1
+    request.user.save()
+    """print('Datenbankeintrag path:')
+    print(pic.picture_path_file.path)
+    #print('mit Attribut name:')
+    #print(pic.picture_path_file.url)
+    pa = Path(pic.picture_path_file.path)
+    print('nach Anwendung von Python Path auf path:')
+    print(pa)"""
+    #print("neuer Filename:")
+    #meta_name = 'metafile_' + str(pic.id) + '.json'
+    #print(meta_name)
+    #meta_name = meta_name.name
+    #print(meta_name)
+    #if request.user.username == 'GreatDebugger6':
+        # render(request, 'answer.html', {'s': 'Dateiname fuer Metadaten-Datei erfolgreich konstruiert'})
+    #meta_f = Testfilecreate()
+    #r = p.rect.rectangles.first()
+    #meta_data = {'label': pic.label, 'x': int(data['x']), 'y': int(data['y']), 'width': int(data['width']), 'height': int(data['height'])}
+    #meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+    #print(meta_data)
+    #if request.user.username == 'GreatDebugger7':
+        #return render(request, 'answer.html', {'s': 'JSON-String angelegt'})
+    #f = open(meta_name, 'wt')
+    #print("ohne explizites open")
+    #pic.metadata_file.save(meta_name, ContentFile(meta_data))
     #data['id']
-    return HttpResponse('Saving successful')
+    return HttpResponse('{"success": true}')
+    #return HttpResponse('Saving successful')
 
 
 
 @login_required()
 @csrf_exempt
-def tag(request):
+def tag2(request):
     print(request.body) # The JSON content
     return HttpResponse('{"success": true}')
+
+
+@login_required()
+def delete_picture(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #print(p.picture_path_file)
+            #print(p.picture_path_file.url)
+            #print(p.picture_path_file.path)
+            default_storage.delete(p.picture_path_file.name)
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+    #p = Picture.objects.get(id=30)
+    #print(p.picture_path_file.path)
+    #default_storage.delete(p.picture_path_file.path)
+    #return HttpResponse("Delete successful")
+
+@login_required()
+def test_creating_metafile(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        pic_list.append((p.picture_path_file.url, p.metadata_file.url))
+    return render(request, 'download.html', {'pic_list': pic_list})
+
+
+"""@login_required()
+def test_creating_metafile2(request):
+    tagged_id = StatusPicture.objects.get(status_type='tagged')
+    pictures = request.user.uploaded.filter(status=tagged_id)
+    if pictures.first() is None:
+        return HttpResponse('no pictures found')
+    pic_list = []
+    for p in pictures:
+        #rec_list = p.rect.rectangles.all()
+        #r = rec_list.first()
+        pa = Path(p.picture_path_file.name)
+        print(pa)
+        meta_name = pa.with_suffix('.json')
+        print(meta_name)
+        meta_name = meta_name.name
+        print(meta_name)
+        meta_f = Testfilecreate()
+        r = p.rect.rectangles.first()
+        meta_data = {'label': p.label, 'x': r.x, 'y': r.y, 'width': r.width, 'height': r.height}
+        meta_data = json.dumps(meta_data, indent=1, ensure_ascii=False)
+        print(meta_data)
+        f = open(meta_name, 'wt')
+        print("ohne explizites Open")
+        meta_f.metadata_file.save(meta_name, ContentFile(meta_data))
+        pic_list.append((p.picture_path_file.url, meta_f.metadata_file.url))
+    return render(request, 'download.html', {'pic_list': pic_list})"""
+
+@login_required()
+def delete_picture_alt(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            default_storage.delete(p.picture_path_file.url)
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+@login_required()
+def delete_picture_alt2(request):
+    if not request.user.is_superuser:
+        return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            p.picture_path_file.delete()
+            p.delete()
+            return HttpResponse('Delete successful')
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+
+@login_required()
+def debug_path(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
+            #path = p.picture_path_file.path
+            #name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            pa = Path(p.picture_path_file.name)
+            print(pa)
+            meta_name = pa.with_suffix('.json')
+            print(meta_name)
+            meta_name = meta_name.name
+            print(meta_name)
+            return render(request, 'info.html', {'c': meta_name})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+
+@login_required()
+def debug_name(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
+            #path = p.picture_path_file.path
+            name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': name})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+
+@login_required()
+def debug_url(request):
+    #if not request.user.is_superuser:
+        #return HttpResponse("Access denied. No Admin rights.")
+    if request.method == 'POST':
+        form = PictureDeleteForm(request.POST)
+        if form.is_valid():
+            pic_id = form.cleaned_data['pic_id']
+            p = Picture.objects.get(id=pic_id)
+            #print(p.id[id])
+            #c = default_storage.__class__
+            #adr = p.picture_path_file.storage
+            url = p.picture_path_file.url
+            #name = p.picture_path_file.name
+            #url = p.picture_path_file.url
+            return render(request, 'info.html', {'c': url})
+
+    form = PictureDeleteForm()
+    return render(request, 'deletepic.html', {'form': form})
+

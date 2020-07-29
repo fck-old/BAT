@@ -1,0 +1,21 @@
+{
+    "images": [
+        {% for p in pictures %}
+        {
+            "id": {{p.id}},
+            "url": "{{p.picture_path_file.url|safe}}",
+            "label": "{{p.label}}",
+            {% ifnotequal p.tagged_by|stringformat:"s" "None" %}
+                "tagged": true
+            {% else %}
+                "tagged": false
+            {% endifnotequal %}
+        }
+        
+        {% if not forloop.last %}
+            ,
+        {% endif %}
+        
+        {% endfor %}
+    ]
+}

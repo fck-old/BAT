@@ -1,6 +1,19 @@
-{% extends 'base.html' %}
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
 
-{% block body %}
+{% block title %}
+  <title>BAT - Delete Account</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/account.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/account.js' %}"></script>
+{% endblock %}
+
+{% block main %}
   <div class="container">
     <h2>Your user infos</h2>
       <form method="post" novalidate>

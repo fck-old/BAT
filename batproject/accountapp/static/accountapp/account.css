@@ -104,3 +104,40 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+#form-errors {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.field-wrapper {
+  position: relative;
+}
+
+.field-error {
+  display: inline;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  transform: translate(330px, 0);
+  border-color: transparent;
+  text-shadow: none;
+}
+
+.non-field-error {
+  border-color: transparent;
+  text-shadow: none;
+}
+
+.field-error::before {
+  content: "";
+  position: absolute;
+  height: 0;
+  width: 0;
+  transform: translate(0, -3px);
+  left: -30px;
+  border: 15px solid transparent;
+  border-right-color: #f8d7db;
+}

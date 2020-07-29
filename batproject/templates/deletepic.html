@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+    {% block content %}
+         <h1> Admin: Delete picture  </h1>
+        <form method="post" >
+            {% csrf_token %}
+            <label>Enter the id of the picture to delete:</label>
+            <input type="number" id="pic_id" name="pic_id">
+            <button type="submit">Delete</button>
+        </form>
+    {% endblock %}

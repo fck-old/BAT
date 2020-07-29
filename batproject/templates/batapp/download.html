@@ -1,0 +1,23 @@
+{
+    "user": "{{user.username|safe}}",
+    "images": [
+        {% for p, rec_list in pic_list %}
+        {
+            "id": {{p.id|safe}},
+            "label": "{{p.label|safe}}",
+            "url": "{{p.picture_path_file.url|safe}}",
+            "tags": [
+                {% for l in rec_list %}
+                {
+                    "x": {{l.x|safe}},
+                    "y": {{l.y|safe}},
+                    "width": {{l.width|safe}},
+                    "height": {{l.height|safe}}
+                }{% if not forloop.last %},{% endif %}
+                {% endfor %}
+            ],
+            "tagged": {% if rec_list|length != 0 %}true{% else %}false{% endif %}
+        }{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ]
+}

@@ -31,7 +31,8 @@ def signup(request):
         print("gib html aus")
     return render(request, 'accountapp/signup.html', {'form': form})
 
-def login(request):
+# IS NOT CALLED!!
+def loginOBSOLETE(request):
     if request.method == 'POST':
         form = LoginForm(request.POST)
         print("ist Form valide?")
@@ -40,7 +41,7 @@ def login(request):
             form_bat_user = form.save()
             auth_login(request, form_bat_user)
             context = {'username': request.user.username}
-            return render(request, 'user.html', context)
+            #return render(request, 'user.html', context)
         else:
             print("not valid")
     else:
@@ -48,8 +49,8 @@ def login(request):
         print("gib html aus")
     return render(request, 'accountapp/login.html', {'form': form})
 
-def user(request):
-    return render(request, 'user.html', None)
+def account(request):
+    return render(request, 'batapp/account.html', {'nav': 'account'})
 
 @login_required
 def changePassword(request):
@@ -59,10 +60,10 @@ def changePassword(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             context = {'username': request.user.username, 'email': request.user.email}
-            return render(request, 'user.html', context)
+            return render(request, 'batapp/account.html', context)
     else:
         form = ChangePasswordForm(request.user)
-    return render(request, 'changePassword.html', {'form': form})
+    return render(request, 'batapp/changePassword.html', {'form': form, 'nav': 'account'})
 
 
 @login_required
@@ -76,10 +77,10 @@ def changeProfile(request):
             user.last_name = form.cleaned_data['last_name']
             user.save()
             update_session_auth_hash(request, user)
-            return redirect('user')
+            return redirect('account')
     else:
         form = ChangeProfileForm()
-    return render(request, 'changeProfile.html', {'form': form})
+    return render(request, 'batapp/changeProfile.html', {'form': form, 'nav': 'account'})
 
 
 @login_required
@@ -87,9 +88,9 @@ def deleteAccount(request):
     if request.method == 'POST':
         u = User.objects.get(username=request.user.username)
         u.delete()
-        return render(request, 'functionality.html', None)
+        return redirect('index')
     else:
-        return render(request, 'deleteAccount.html', None)
+        return render(request, 'batapp/deleteAccount.html', {'nav': 'account'})
 
 def home(request):
     return HttpResponse(request.user)

@@ -1,0 +1,40 @@
+{% extends 'batapp/dashboard.html' %}
+{% load static %}
+
+{% block title %}
+  <title>BAT - Upload</title>
+{% endblock %}
+
+{% block stylesheets %}
+  <link rel="stylesheet" href="{% static 'batapp/upload.css' %}">
+{% endblock %}
+
+{% block javascripts %}
+  <script src="{% static 'batapp/upload.js' %}"></script>
+{% endblock %}
+
+{% block main %}
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-0 px-3">
+      <h1 class="h2">Tag: <span id="label">{{ form.label }}</span></h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="mr-2">
+          <button type="reset" id="reset" class="btn btn-sm btn-danger">Reset</button>
+          <button type="submit" id="save" class="btn btn-sm btn-success" disabled>Save</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- IMAGE -->
+    <div id="container">
+      <img id="image" src="" alt="">
+      <div id="file-container">
+        {{ form.picture_path_file }}
+      </div>
+    </div>
+    <!-- END: IMAGE -->
+    
+  </form>
+{% endblock %}

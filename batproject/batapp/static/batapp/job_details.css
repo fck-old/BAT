@@ -1,0 +1,109 @@
+html, body {
+  height: 100%;
+}
+
+#totag {
+  color: #f7b500;
+}
+
+#image-container {
+  width: 100%;
+  height: calc(100% - 110px);
+  position: relative;
+}
+
+.tag {
+  width: 180px;
+  height: 110px;
+  position: absolute;
+  top: 140px;
+  left: 430px;
+  border: 8px solid #f7b500;
+  border-radius: 3px;
+  box-shadow: 0px 0px 3px black;
+}
+
+/* CANVAS */
+#container {
+  border-top: 1px solid #ebebeb;
+  width: 100%;
+  height: calc(100% - 70px);
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  #container {
+    height: calc(100% - 95px);
+    border: 1px solid #ebebeb;
+  }
+}
+
+#translation {
+  position: relative;
+  height: 100%;
+  width: 100%;
+  transform: translate(0, 0);
+}
+
+#image, #canvas, #tagcontainer {
+  display: block;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#tag {
+    position: absolute;
+    border: 2px solid yellow;
+    top: 0;
+    visibility: hidden;
+}
+
+.empty #translation {
+  visibility: hidden;
+}
+
+#loading {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 40px;
+  visibility: hidden;
+}
+
+.empty #loading {
+  visibility: visible;
+}
+
+#skip:focus {
+  box-shadow: none;
+}
+
+#back-button {
+  color: #fff;
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  box-shadow: none;
+}
+
+#back-button:active {
+  color: #fff;
+  background-color: #117a8b;
+  border-color: #10707f;
+}
+
+#tag-delete {
+  color: #fff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+  box-shadow: none;
+}
+
+#tag-delete:active {
+  color: #fff;
+  background-color: #bd2130;
+  border-color: #b21f2d;
+}
